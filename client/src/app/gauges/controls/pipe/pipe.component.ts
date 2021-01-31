@@ -26,12 +26,12 @@ export class PipeComponent {
     return this.actionsType;
   }
 
-  static getSignals(pro: any) {
-    return GaugeBaseComponent.getSignals(pro);
-  }
-
   static getDialogType(): GaugeDialogType {
     return GaugeDialogType.Pipe;
+  }
+
+  static getSignals(pro: any) {
+    return GaugeBaseComponent.getSignals(pro);
   }
 
   static processValue(ga: GaugeSettings, svgele: any, sig: Variable, gaugeStatus: GaugeStatus) {
