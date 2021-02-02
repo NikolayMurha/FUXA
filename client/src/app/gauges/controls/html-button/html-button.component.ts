@@ -1,8 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {GaugeBaseComponent} from '../../gauge-base/gauge-base.component'
-import {GaugeSettings, GaugeStatus, Variable} from '../../../_models/hmi';
+import {GaugeAction, GaugeSettings, GaugeStatus, Variable} from '../../../_models/hmi';
 import {Utils} from '../../../_helpers/utils';
 import {GaugeDialogType} from '../../gauge-property/gauge-property.component';
+
+declare var SVG: any;
 
 @Component({
   selector: 'html-button',
@@ -91,7 +93,16 @@ export class HtmlButtonComponent extends GaugeBaseComponent implements OnInit {
         }
         button.style.backgroundColor = clr;
       }
+      // check actions
+      if (ga.property.actions) {
+        ga.property.actions.forEach(act => {
+          if (act.variableId === sig.id) {
+            HtmlButtonComponent.processAction(act, svgele, val, gaugeStatus);
+          }
+        });
+      }
     }
+
   }
 
   static getFillColor(ele) {
@@ -124,5 +135,20 @@ export class HtmlButtonComponent extends GaugeBaseComponent implements OnInit {
       }
     }
     return ele.getAttribute('stroke');
+  }
+
+  static processAction(act: GaugeAction, svgele: any, value: any, gaugeStatus: GaugeStatus) {
+    let element = SVG.adopt(svgele.node);
+    if (act.range.min <= value && act.range.max >= value) {
+      this.runAction(element, act.type, gaugeStatus);
+    }
+  }
+
+  static runAction(element, type, gaugeStatus: GaugeStatus) {
+    if (this.actionsType[type] === this.actionsType.hide) {
+      gaugeStatus.actionRef = { type: type, animr: element.hide() };
+    } else if (this.actionsType[type] === this.actionsType.show) {
+      gaugeStatus.actionRef = { type: type, animr: element.show() };
+    }
   }
 }
