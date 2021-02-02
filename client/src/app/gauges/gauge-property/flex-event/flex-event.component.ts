@@ -85,6 +85,12 @@ export class FlexEventComponent implements OnInit {
     let b = Object.values(this.actionType).indexOf(GaugeEventActionType.onSetInput);
     return a === b;
   }
+  
+  withToggleValue(action) {
+    let a = Object.keys(this.actionType).indexOf(action);
+    let b = Object.values(this.actionType).indexOf(GaugeEventActionType.onToggleValue);
+    return a === b;
+  }
 
   withAddress(action) {
     let a = Object.keys(this.actionType).indexOf(action);

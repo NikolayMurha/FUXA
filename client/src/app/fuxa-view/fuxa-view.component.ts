@@ -280,6 +280,8 @@ export class FuxaViewComponent implements OnInit, AfterViewInit {
               self.openDialog(ev, event[i].actparam, event[i].actoptions);
             } else if (eventTypes.indexOf(GaugeEventActionType.onSetValue) === actindex) {
               self.onSetValue(ga, event[i]);
+            } else if (eventTypes.indexOf(GaugeEventActionType.onToggleValue) === actindex) {
+              self.onToggleValue(ga, event[i]);
             } else if (eventTypes.indexOf(GaugeEventActionType.onSetInput) === actindex) {
               self.onSetInput(ga, event[i]);
             } else if (eventTypes.indexOf(GaugeEventActionType.oniframe) === actindex) {
@@ -292,6 +294,14 @@ export class FuxaViewComponent implements OnInit, AfterViewInit {
           }
         }
       });
+    }
+  }
+
+  onToggleValue(ga: GaugeSettings, event: GaugeEvent){
+    if (event.actoptions && event.actoptions['variableId']) {
+      this.gaugesManager.toggleSignalValue(event.actoptions['variableId']);
+    } else if (ga.property && ga.property.variableId) {
+      this.gaugesManager.toggleSignalValue(ga.property.variableId);
     }
   }
 
