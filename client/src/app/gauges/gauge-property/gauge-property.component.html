@@ -48,7 +48,7 @@
 						</button>
 					</div>
 				</div>
-				<div mat-dialog-content style="overflow: hidden; width:100%;">
+				<div mat-dialog-content style="width:100%;">
 					<flex-event [property]="property" [views]="views" [data]="data" [inputs]="inputs" #flexevent *ngIf="eventsSupported" style="padding-bottom: 5px"></flex-event>
 				</div>
 			</div>
@@ -70,7 +70,7 @@
 					<flex-action [data]="data" [property]="property" #flexaction *ngIf="actionsSupported" style="padding-bottom: 5px"></flex-action>
 				</div>
 			</div>
-        </mat-tab>        
+        </mat-tab>
 	</mat-tab-group>
 	<div mat-dialog-actions class="dialog-action">
 		<button mat-raised-button (click)="onNoClick()">{{'dlg.cancel' | translate}}</button>
