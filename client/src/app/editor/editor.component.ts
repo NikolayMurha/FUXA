@@ -44,6 +44,7 @@ declare var initSvgutils: any;
 declare var myselect: any;
 declare var initSelect: any;
 declare var mydraw: any;
+declare var mylayer: any;
 declare var initDraw: any;
 declare var mylocal: any;
 declare var initLocale: any;
@@ -181,6 +182,9 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
             mysvgutils.initSvgutils();
             myselect.initSelect();
             mydraw.initDraw();
+            if (mylayer){
+              mylayer.init();
+            }
             mysvgcanvas.initSvgCanvas();
             // init svg-editor
             let toinit = mysvgeditor.initSvgEditor($,
