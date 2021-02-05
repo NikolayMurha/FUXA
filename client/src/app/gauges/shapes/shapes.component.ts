@@ -80,7 +80,7 @@ export class ShapesComponent extends GaugeBaseComponent implements OnInit {
                             ShapesComponent.processAction(act, svgele, value, gaugeStatus);
                         }
                     });
-                }                
+                }
             }
         }
     }

@@ -182,7 +182,7 @@ export class EditorComponent implements OnInit, AfterViewInit, OnDestroy {
             mysvgutils.initSvgutils();
             myselect.initSelect();
             mydraw.initDraw();
-            if (mylayer){
+            if (window.mylayer){
               mylayer.init();
             }
             mysvgcanvas.initSvgCanvas();
