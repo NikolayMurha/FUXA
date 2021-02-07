@@ -599,6 +599,9 @@ export class GaugesManager {
                 this.translateService.get(chartRange[key]).subscribe((txt: string) => { chartRange[key] = txt });
             });
             let gauge: NgxDygraphsComponent = HtmlChartComponent.initElement(ga, res, ref, isview, chartRange);
+            if (!gauge) {
+                return false;
+            }
             gauge.init();
             if (ga.property && ga.property.id) {
                 let chart = this.hmiService.getChart(ga.property.id)
