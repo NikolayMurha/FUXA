@@ -1,9 +1,9 @@
 <div style="width: 1150px;" class="dialog-mdsd-vh">
     <h1 mat-dialog-title style="display:inline-block;cursor: move" mat-dialog-draggable>{{'chart.config-title' | translate}}</h1>
-    <mat-icon (click)="onNoClick()" style="float:right;margin-right:-10px;margin-top:-10px;cursor:pointer;color:gray;">clear</mat-icon>
+    <mat-icon (click)="onNoClick()" style="float:right;margin-right:10px;cursor:pointer;color:gray;">clear</mat-icon>
     <div style="display: inline-block; width: 100%">
         <div class="panelTop">
-            <mat-grid-list cols="3" rowHeight="100%">
+            <mat-grid-list cols="3" rowHeight="fit" style="height: 100%">
                 <mat-grid-tile class="chart-list">
                     <mat-list class="list" >
                         <mat-list-item class="list-item list-header">
