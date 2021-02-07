@@ -602,7 +602,7 @@ export class GaugesManager {
             gauge.init();
             if (ga.property && ga.property.id) {
                 let chart = this.hmiService.getChart(ga.property.id)
-                if (chart && chart.lines) {
+                if (chart) {
                     chart.lines.forEach(line => {
                         let sigid = HmiService.toVariableId(line.device, line.id);
                         let sigProperty = this.hmiService.getMappedVariable(sigid, true);
@@ -610,8 +610,8 @@ export class GaugesManager {
                             gauge.addLine(sigid, sigProperty.name, line.color);
                         }
                     });
+                    gauge.setOptions({ title: chart.name });
                 }
-                gauge.setOptions({ title: chart.name });
             }
             this.mapChart[ga.id] = gauge;
             gauge.resize();
