@@ -602,13 +602,15 @@ export class GaugesManager {
             gauge.init();
             if (ga.property && ga.property.id) {
                 let chart = this.hmiService.getChart(ga.property.id)
-                chart.lines.forEach(line => {
-                    let sigid = HmiService.toVariableId(line.device, line.id);
-                    let sigProperty = this.hmiService.getMappedVariable(sigid, true);
-                    if (sigProperty) {
-                        gauge.addLine(sigid, sigProperty.name, line.color);
-                    }
-                });
+                if (chart && chart.lines) {
+                    chart.lines.forEach(line => {
+                        let sigid = HmiService.toVariableId(line.device, line.id);
+                        let sigProperty = this.hmiService.getMappedVariable(sigid, true);
+                        if (sigProperty) {
+                            gauge.addLine(sigid, sigProperty.name, line.color);
+                        }
+                    });
+                }
                 gauge.setOptions({ title: chart.name });
             }
             this.mapChart[ga.id] = gauge;
