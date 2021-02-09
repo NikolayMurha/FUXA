@@ -1,6 +1,6 @@
 <div style="width:700px;position: relative;margin-bottom: 40px">
     <h1 mat-dialog-title style="display:inline-block;cursor:move;" mat-dialog-draggable>{{'editor.controls-pipe-settings' | translate}}</h1>
-    <mat-icon (click)="onNoClick()" style="float:right;margin-right:-10px;margin-top:-10px;cursor:pointer;color:gray;">clear</mat-icon>
+    <mat-icon (click)="onNoClick()" style="float:right;margin-right:10px;margin-top:10px;cursor:pointer;color:gray;">clear</mat-icon>
     <mat-tab-group style="width: 100%;height: 560px;">
         <mat-tab label="{{'pipe.property-props' | translate}}">
             <div style="max-height: 495px; overflow-y: auto; overflow-x: hidden; padding-top: 15px;">
@@ -97,7 +97,7 @@
             </div>
         </mat-tab>
     </mat-tab-group>
-    <!-- 
+    <!--
     <div style="display: block; width: 660px;padding-top: 30px">
         <div style="display: block;">
             <flex-auth [name]="name" [permission]="property.permission" #flexauth></flex-auth>

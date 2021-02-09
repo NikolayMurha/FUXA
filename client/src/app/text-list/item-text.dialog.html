@@ -1,6 +1,6 @@
 <div style="width: 600px;">
     <h1 mat-dialog-title style="display:inline-block;cursor:move;" mat-dialog-draggable>{{'dlg.textproperty-title' | translate}}</h1>
-    <mat-icon (click)="onNoClick()" style="float:right;margin-right:-10px;margin-top:-10px;cursor:pointer;color:gray;">clear</mat-icon>
+    <mat-icon (click)="onNoClick()" style="float:right;margin-right:10px;margin-top:10px;cursor:pointer;color:gray;">clear</mat-icon>
     <div mat-dialog-content *ngIf="data.editmode < 0">
 		{{'msg.text-remove' | translate}} ({{data.text.name}}) '{{data.text.value}}' ?
 	</div>

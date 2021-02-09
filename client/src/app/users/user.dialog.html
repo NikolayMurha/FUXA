@@ -1,6 +1,6 @@
 <div>
     <h1 mat-dialog-title style="display:inline-block;cursor:move;" mat-dialog-draggable>{{'dlg.userproperty-title' | translate}}</h1>
-    <mat-icon (click)="onNoClick()" style="float:right;margin-right:-10px;margin-top:-10px;cursor:pointer;color:gray;">clear</mat-icon>
+    <mat-icon (click)="onNoClick()" style="float:right;margin-right:10px;margin-top:10px;cursor:pointer;color:gray;">clear</mat-icon>
     <div mat-dialog-content *ngIf="data.editmode < 0">
 		{{'msg.user-remove' | translate}} '{{data.user.username}}' ?
 	</div>
@@ -17,7 +17,7 @@
         <div class="my-form-field" style="display: block;margin-bottom: 10px;">
             <span>{{'dlg.userproperty-groups' | translate}}</span>
             <sel-options #seloptions [selected]="selectedGroups" [disabled]="isAdmin()" [options]="groups"></sel-options>
-        </div>        
+        </div>
     </div>
     <div mat-dialog-actions class="dialog-action">
         <button mat-raised-button (click)="onNoClick()">{{'dlg.cancel' | translate}}</button>

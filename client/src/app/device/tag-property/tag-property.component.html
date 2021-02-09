@@ -6,7 +6,7 @@
         <h1 *ngIf="withtree" mat-dialog-title style="display:inline-block; cursor:move; padding-top: 15px" mat-dialog-draggable>
             {{'device.browsetag-property-title' | translate}}
         </h1>
-        <mat-icon (click)="onNoClick()" style="float:right;cursor:pointer;color:gray;position: relative; top: 10px; right: 0px">clear</mat-icon>
+        <mat-icon (click)="onNoClick()" style="float:right;cursor:pointer;color:gray;position: relative; top: 10px; right: 10px">clear</mat-icon>
     </div>
     <div style="max-height: 540px; overflow-y: auto; overflow-x: hidden;" *ngIf="!withtree">
         <div style="display: block;">
@@ -52,7 +52,7 @@
                             {{ type.key }}
                         </mat-option>
                     </mat-select>
-                </div>                
+                </div>
                 <div class="my-form-field" style="display: block;margin-bottom: 10px;">
                     <span>{{'device.tag-property-type' | translate}}</span>
                     <mat-select [(value)]="data.tag.type" style="width: 350px" [disabled]="!memaddress.value || memaddress.value == '000000' || memaddress.value == '100000'">
