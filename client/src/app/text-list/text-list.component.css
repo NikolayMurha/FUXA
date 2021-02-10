@@ -37,11 +37,11 @@
 
 .mat-table {
     overflow: auto;
-    min-width: 1560px;
+    min-width: 1280px;
     /* margin: 5px; */
     /* max-height: 500px; */
 }
-  
+
 .mat-header-cell.mat-sort-header-sorted {
     color: black;
 }

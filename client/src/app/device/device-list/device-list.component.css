@@ -23,9 +23,9 @@
 
 .mat-table {
     overflow: auto;
-    min-width: 1560px;
+    min-width: 1280px;
 }
-  
+
 .mat-header-cell.mat-sort-header-sorted {
     color: black;
 }

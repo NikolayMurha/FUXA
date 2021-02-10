@@ -25,18 +25,18 @@
     flex-direction: column;
     min-width: 300px;
     position: absolute;
-    bottom: 0px;
-    top: 0px;
-    left:0px;
-    right:0px;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     background-color: white;
 }
 
 .mat-table {
     overflow: auto;
-    min-width: 1560px;
+    min-width: 1280px;
 }
-  
+
 .mat-header-cell.mat-sort-header-sorted {
     color: black;
 }
