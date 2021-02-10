@@ -2,7 +2,7 @@
     {{'alarms.view-title' | translate}}
 </div>
 <div class="work-panel" [ngStyle]="{'top': fullview ? '40px' : '0px'}">
-    <mat-table #table [dataSource]="dataSource" matSort>
+    <mat-table #table [dataSource]="dataSource" matSort matSortActive="ontime" matSortDirection="asc">
         <ng-container matColumnDef="ontime">
             <mat-header-cell *matHeaderCellDef mat-sort-header> {{'alarms.view-ontime' | translate}} </mat-header-cell>
             <mat-cell *matCellDef="let element" [style.color]="element.color"> {{element.ontime | date: 'yyyy.MM.dd HH:mm:ss'}} </mat-cell>
@@ -43,8 +43,8 @@
                 </button>
             </mat-cell>
         </ng-container>
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let element; columns: displayedColumns;" class="my-mat-row" 
+        <mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let element; columns: displayedColumns;" class="my-mat-row"
                         [style.background-color]="element.bkcolor"></mat-row>
     </mat-table>
 </div>
