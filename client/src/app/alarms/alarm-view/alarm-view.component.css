@@ -36,10 +36,8 @@
 }
 
 .mat-table {
-    overflow: auto;
     min-width: 1280px;
-    /* margin: 5px; */
-    /* max-height: 500px; */
+    height: 100%;
 }
 
 .mat-header-cell.mat-sort-header-sorted {
