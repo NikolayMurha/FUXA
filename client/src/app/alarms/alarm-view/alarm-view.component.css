@@ -38,6 +38,7 @@
 .mat-table {
     min-width: 1280px;
     height: 100%;
+    overflow: auto;
 }
 
 .mat-header-cell.mat-sort-header-sorted {
