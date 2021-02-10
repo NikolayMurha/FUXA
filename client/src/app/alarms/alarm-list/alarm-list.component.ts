@@ -53,8 +53,8 @@ export class AlarmListComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.editAlarm(alarm, 1);
     }
 
-    onEditAlarm(alarm: Alarm, toAdd: number) {
-		this.editAlarm(alarm, 0);
+    onEditAlarm(alarm: Alarm, toAdd: number=0) {
+		this.editAlarm(alarm, toAdd);
     }
 
     onRemoveAlarm(alarm: Alarm) {
@@ -95,6 +95,6 @@ export class AlarmListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private loadAlarms() {
-        this.dataSource.data = this.projectService.getAlarms(); 
+        this.dataSource.data = this.projectService.getAlarms();
 	}
 }

@@ -43,8 +43,8 @@
                 </button>
             </mat-cell>
         </ng-container>
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let element; columns: displayedColumns;" class="my-mat-row" 
+        <mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></mat-header-row>
+        <mat-row *matRowDef="let element; columns: displayedColumns;" class="my-mat-row"
                         [style.background-color]="element.bkcolor"></mat-row>
     </mat-table>
 </div>
