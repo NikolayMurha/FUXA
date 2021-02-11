@@ -42,7 +42,7 @@ export class AlarmPropertyComponent implements OnInit {
         }
         if (!this.data.alarm.high) {
             this.data.alarm.high = new AlarmSubProperty();
-            this.data.alarm.high.bkcolor = "#F9CF59";
+            this.data.alarm.high.bkcolor = "#ffff00";
             this.data.alarm.high.color = "#000";
             this.data.alarm.high.enabled = true;
             this.data.alarm.high.ackmode = <AlarmAckMode>Object.keys(AlarmAckMode)[Object.values(AlarmAckMode).indexOf(AlarmAckMode.ackactive)];
