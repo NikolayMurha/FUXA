@@ -34,7 +34,7 @@ export class SettingsService {
         return this.appSettings;
     }
 
-    setSettings(settings, nosave:boolean) {
+    setSettings(settings, nosave?: boolean) {
         this.appSettings = settings;
         this.projectService.setSettings(this.appSettings, nosave);
         this.fuxaLanguage.use(this.appSettings.language);

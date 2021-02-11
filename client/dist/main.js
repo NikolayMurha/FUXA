@@ -2499,6 +2499,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ngx-translate/core */ "../node_modules/@ngx-translate/core/fesm5/ngx-translate-core.js");
 /* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! file-saver */ "../node_modules/file-saver/FileSaver.js");
 /* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _models_settings__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../_models/settings */ "./app/_models/settings.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2508,6 +2509,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -2853,6 +2855,16 @@ var ProjectService = /** @class */ (function () {
         }
     };
     //#endregion
+    ProjectService.prototype.setSettings = function (settings, nosave) {
+        var _this = this;
+        this.projectData.settings = settings;
+        if (_environments_environment__WEBPACK_IMPORTED_MODULE_3__["environment"].serverEnabled) {
+            this.setServerProjectData(ProjectDataCmdType.Settings, settings).subscribe(function (result) {
+            }, function (err) {
+                _this.notifySaveError(err);
+            });
+        }
+    };
     //#region Alarms resource
     /**
      * get alarms resource
@@ -3192,6 +3204,7 @@ var ProjectData = /** @class */ (function () {
         this.alarms = [];
         this.texts = [];
         this.plugin = [];
+        this.settings = new _models_settings__WEBPACK_IMPORTED_MODULE_10__["AppSettings"]();
     }
     return ProjectData;
 }());
@@ -3208,6 +3221,7 @@ var ProjectDataCmdType;
     ProjectDataCmdType["DelText"] = "del-text";
     ProjectDataCmdType["SetAlarm"] = "set-alarm";
     ProjectDataCmdType["DelAlarm"] = "del-alarm";
+    ProjectDataCmdType["Settings"] = "settings";
 })(ProjectDataCmdType || (ProjectDataCmdType = {}));
 var ServerSettings = /** @class */ (function () {
     function ServerSettings() {
@@ -3232,6 +3246,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "../node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _ngx_translate_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ngx-translate/core */ "../node_modules/@ngx-translate/core/fesm5/ngx-translate-core.js");
 /* harmony import */ var _models_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../_models/settings */ "./app/_models/settings.ts");
+/* harmony import */ var _project_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./project.service */ "./app/_services/project.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3244,10 +3259,19 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var SettingsService = /** @class */ (function () {
-    function SettingsService(fuxaLanguage) {
+    function SettingsService(fuxaLanguage, projectService) {
+        var _this = this;
         this.fuxaLanguage = fuxaLanguage;
+        this.projectService = projectService;
         this.appSettings = new _models_settings__WEBPACK_IMPORTED_MODULE_2__["AppSettings"]();
+        projectService.onLoadHmi.subscribe(function (res) {
+            _this.appSettings = projectService.getProject().settings || new _models_settings__WEBPACK_IMPORTED_MODULE_2__["AppSettings"]();
+            if (_this.appSettings.language) {
+                _this.useLanguage(_this.appSettings.language);
+            }
+        });
     }
     SettingsService.prototype.init = function () {
         // this language will be used as a fallback when a translation isn't found in the current language
@@ -3255,19 +3279,24 @@ var SettingsService = /** @class */ (function () {
         // the lang to use, if the lang isn't available, it will use the current loader to get them
         this.fuxaLanguage.use('en');
         // to load saved settings
-        this.setLanguage(this.appSettings.language);
+        this.useLanguage(this.appSettings.language);
     };
     SettingsService.prototype.getSettings = function () {
         return this.appSettings;
     };
-    SettingsService.prototype.setLanguage = function (language) {
+    SettingsService.prototype.setSettings = function (settings, nosave) {
+        this.appSettings = settings;
+        this.projectService.setSettings(this.appSettings, nosave);
+        this.fuxaLanguage.use(this.appSettings.language);
+    };
+    SettingsService.prototype.useLanguage = function (language) {
         this.fuxaLanguage.use(language);
     };
     SettingsService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
             providedIn: 'root'
         }),
-        __metadata("design:paramtypes", [_ngx_translate_core__WEBPACK_IMPORTED_MODULE_1__["TranslateService"]])
+        __metadata("design:paramtypes", [_ngx_translate_core__WEBPACK_IMPORTED_MODULE_1__["TranslateService"], _project_service__WEBPACK_IMPORTED_MODULE_3__["ProjectService"]])
     ], SettingsService);
     return SettingsService;
 }());
@@ -6319,7 +6348,7 @@ var AppSettingsComponent = /** @class */ (function () {
         this.dialogRef.close();
     };
     AppSettingsComponent.prototype.onOkClick = function () {
-        this.settingsService.setLanguage(this.settings.language);
+        this.settingsService.setSettings(this.settings);
         this.dialogRef.close();
     };
     AppSettingsComponent.prototype.onLanguageChange = function (language) {
