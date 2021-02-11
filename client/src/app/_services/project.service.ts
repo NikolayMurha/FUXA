@@ -14,6 +14,8 @@ import { ToastrService } from 'ngx-toastr';
 import { TranslateService } from '@ngx-translate/core';
 
 import * as FileSaver from 'file-saver';
+import {SettingsService} from "./settings.service";
+import {AppSettings} from "../_models/settings";
 
 @Injectable()
 export class ProjectService {
@@ -129,7 +131,7 @@ export class ProjectService {
     reload() {
         this.load();
     }
-    
+
     /**
      * Remove Tag value to save without value
      * Value was added by HmiService from socketIo event
@@ -165,7 +167,7 @@ export class ProjectService {
                     }, err => {
                         console.log(err);
                         this.notifySaveError(err);
-                    });                
+                    });
                 }, err => {
                     console.log(err);
                     this.notifySaveError(err);
@@ -181,7 +183,7 @@ export class ProjectService {
             }, err => {
                 console.log(err);
                 this.notifySaveError(err);
-            });                
+            });
         }
     }
 
@@ -208,7 +210,7 @@ export class ProjectService {
             }, err => {
                 console.log(err);
                 this.notifySaveError(err);
-            });            
+            });
         }
     }
     //#endregion
@@ -280,7 +282,7 @@ export class ProjectService {
         let params = { cmd: cmd, data: data };
         return this.http.post<any>(this.endPointConfig + '/api/projectData', params, { headers: header });
     }
-    
+
     getDeviceSecurity(name: string): Observable<any> {
         let header = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = { query: 'security', name: name };
@@ -296,7 +298,7 @@ export class ProjectService {
     getAlarmsValues(): Observable<any> {
         return this.http.get<any>(this.endPointConfig + '/api/alarms', {});
     }
-    
+
     setAlarmAck(name: string): Observable<any> {
         return new Observable((observer) => {
             let header = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -304,7 +306,7 @@ export class ProjectService {
                 observer.next();
             }, err => {
                 observer.error(err);
-            });                
+            });
         });
 
         // let header = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -366,6 +368,17 @@ export class ProjectService {
     }
     //#endregion
 
+    setSettings(settings: any, nosave?: boolean) {
+        this.projectData.settings = settings;
+        if (environment.serverEnabled) {
+            this.setServerProjectData(ProjectDataCmdType.Settings, settings).subscribe(result => {
+            }, err => {
+                this.notifySaveError(err);
+            });
+        }
+    }
+
+
     //#region Alarms resource
     /**
      * get alarms resource
@@ -412,7 +425,7 @@ export class ProjectService {
 
     /**
      * remove the text from project
-     * @param text 
+     * @param text
      */
     removeAlarm(alarm: Alarm) {
         return new Observable((observer) => {
@@ -465,12 +478,12 @@ export class ProjectService {
         }, err => {
             console.log(err);
             this.notifySaveError(err);
-        });                
+        });
     }
 
     /**
      * remove the text from project
-     * @param text 
+     * @param text
      */
     removeText(text: Text) {
         if (this.projectData.texts) {
@@ -485,7 +498,7 @@ export class ProjectService {
         }, err => {
             console.log(err);
             this.notifySaveError(err);
-        });           
+        });
     }
     //#endregion
 
@@ -586,7 +599,7 @@ export class ProjectService {
 
     /**
      * Send Save Project to to editor component
-     * @param saveas 
+     * @param saveas
      */
     saveProject(saveas?: boolean) {
         this.onSaveCurrent.emit(saveas);
@@ -655,8 +668,8 @@ export class ProjectService {
     }
 
     /**
-     * This function coverts a DOM Tree into JavaScript Object. 
-     * @param srcDOM: DOM Tree to be converted. 
+     * This function coverts a DOM Tree into JavaScript Object.
+     * @param srcDOM: DOM Tree to be converted.
      */
     private _xml2json(xml) {
         // Create the return object
@@ -705,6 +718,7 @@ export class ProjectData {
     alarms: Alarm[] = [];
     texts: Text[] = [];
     plugin: Plugin[] = [];
+    settings: AppSettings = new AppSettings();
 }
 
 export enum ProjectDataCmdType {
@@ -718,6 +732,7 @@ export enum ProjectDataCmdType {
     DelText = 'del-text',
     SetAlarm = 'set-alarm',
     DelAlarm = 'del-alarm',
+    Settings = 'settings',
 }
 
 export class ServerSettings {

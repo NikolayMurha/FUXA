@@ -32,7 +32,7 @@ export class AppSettingsComponent implements OnInit {
     }
 
     onOkClick() {
-        this.settingsService.setLanguage(this.settings.language);
+        this.settingsService.setSettings(this.settings);
         this.dialogRef.close();
     }
 

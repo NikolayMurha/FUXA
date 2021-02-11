@@ -3616,7 +3616,7 @@ var AlarmPropertyComponent = /** @class */ (function () {
         }
         if (!this.data.alarm.high) {
             this.data.alarm.high = new _models_alarm__WEBPACK_IMPORTED_MODULE_5__["AlarmSubProperty"]();
-            this.data.alarm.high.bkcolor = "#F9CF59";
+            this.data.alarm.high.bkcolor = "#ffff00";
             this.data.alarm.high.color = "#000";
             this.data.alarm.high.enabled = true;
             this.data.alarm.high.ackmode = Object.keys(_models_alarm__WEBPACK_IMPORTED_MODULE_5__["AlarmAckMode"])[Object.values(_models_alarm__WEBPACK_IMPORTED_MODULE_5__["AlarmAckMode"]).indexOf(_models_alarm__WEBPACK_IMPORTED_MODULE_5__["AlarmAckMode"].ackactive)];

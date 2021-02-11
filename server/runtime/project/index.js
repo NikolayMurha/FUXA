@@ -1,5 +1,5 @@
 /*
-* Project manager: read, write, add, remove, ... and save 
+* Project manager: read, write, add, remove, ... and save
 */
 
 'use strict';
@@ -20,8 +20,8 @@ var data = {};                  // Project data
 
 /**
  * Init Project resource and update project
- * @param {*} _settings 
- * @param {*} log 
+ * @param {*} _settings
+ * @param {*} log
  */
 function init(_settings, log) {
     settings = _settings;
@@ -55,7 +55,7 @@ function init(_settings, log) {
  */
 function load() {
     return new Promise(function (resolve, reject) {
-        data = { devices: {}, hmi: { views: [] }, texts: [], alarms: [] };
+        data = { devices: {}, hmi: { views: [] }, texts: [], alarms: [], settings: {} };
         // load general data
         prjstorage.getSection(prjstorage.TableType.GENERAL).then(grows => {
             for (var ig = 0; ig < grows.length; ig++) {
@@ -98,7 +98,7 @@ function load() {
                             }).catch(function (err) {
                                 logger.error(`project.prjstorage-failed-to-load! '${prjstorage.TableType.ALARMS}' ${err}`);
                                 callback(err);
-                            }); 
+                            });
                         }
                     ],
                     function (err) {
@@ -126,8 +126,8 @@ function load() {
 /**
  * Save the value in project storage
  * First set the value in local data, then save in storage
- * @param {*} cmd 
- * @param {*} data 
+ * @param {*} cmd
+ * @param {*} value
  */
 function setProjectData(cmd, value) {
     return new Promise(function (resolve, reject) {
@@ -158,7 +158,13 @@ function setProjectData(cmd, value) {
                 section.table = prjstorage.TableType.GENERAL;
                 section.name = cmd;
                 setCharts(value);
-            } else if (cmd === ProjectDataCmdType.SetText) {
+            }
+             else if (cmd === ProjectDataCmdType.Settings) {
+                section.table = prjstorage.TableType.GENERAL;
+                section.name = cmd;
+                setSettings(value);
+            }
+            else if (cmd === ProjectDataCmdType.SetText) {
                 section.table = prjstorage.TableType.TEXTS;
                 section.name = value.name;
                 setText(value);
@@ -177,7 +183,7 @@ function setProjectData(cmd, value) {
             }
             else {
                 logger.error(`prjstorage.setdata failed! '${section.table}'`);
-                reject('prjstorage.failed-to-setdata: Command not found!');    
+                reject('prjstorage.failed-to-setdata: Command not found!');
             }
             if (toremove) {
                 prjstorage.deleteSection(section).then(result => {
@@ -202,7 +208,7 @@ function setProjectData(cmd, value) {
 
 /**
  * Set or add if not exist (check with view.id) the View in Project
- * @param {*} view 
+ * @param {*} view
  */
 function setView(view) {
     var pos = -1;
@@ -220,7 +226,7 @@ function setView(view) {
 
 /**
  * Remove the View from Project
- * @param {*} view 
+ * @param {*} view
  */
 function removeView(view) {
     var pos = -1;
@@ -235,7 +241,7 @@ function removeView(view) {
 
 /**
  * Set Device to loacal data
- * @param {*} device 
+ * @param {*} device
  */
 function setDevice(device) {
     data.devices[device.name] = device;
@@ -243,7 +249,7 @@ function setDevice(device) {
 
 /**
  * Remove Device from local data
- * @param {*} device 
+ * @param {*} device
  */
 function removeDevice(device) {
     delete data.devices[device.name];
@@ -252,15 +258,23 @@ function removeDevice(device) {
 
 /**
  * Set HMI Layout to local data
- * @param {*} layout 
+ * @param {*} layout
  */
 function setHmiLayout(layout) {
     data.hmi.layout = layout;
 }
 
 /**
- * Set Charts  
- * @param {*} charts 
+ * Set Settings
+ * @param {*} settings
+ */
+function setSettings(settings) {
+    data.settings = settings;
+}
+
+/**
+ * Set Charts
+ * @param {*} charts
  */
 function setCharts(charts) {
     data.charts = charts;
@@ -268,7 +282,7 @@ function setCharts(charts) {
 
 /**
  * Set or add if not exist (check with taxt.name) the Text in Project
- * @param {*} text 
+ * @param {*} text
  */
 function setText(text) {
     if (!data.texts) {
@@ -289,7 +303,7 @@ function setText(text) {
 
 /**
  * Remove the Text from Project
- * @param {*} text 
+ * @param {*} text
  */
 function removeText(text) {
     if (data.texts) {
@@ -306,7 +320,7 @@ function removeText(text) {
 
 /**
  * Set or add if not exist (check with alarm.name) the Alarm in Project
- * @param {*} alarm 
+ * @param {*} alarm
  */
 function setAlarm(alarm) {
     if (!data.alarms) {
@@ -327,7 +341,7 @@ function setAlarm(alarm) {
 
 /**
  * Remove the Alarm from Project
- * @param {*} alarm 
+ * @param {*} alarm
  */
 function removeAlarm(alarm) {
     if (data.alarms) {
@@ -354,7 +368,7 @@ function getProject(userId, userGroups) {
 
 /**
  * Set the new Project, clear all from database and add the new content
- * @param {*} prjcontent 
+ * @param {*} prjcontent
  */
 function setProject(prjcontent) {
     return new Promise(function (resolve, reject) {
@@ -392,7 +406,11 @@ function setProject(prjcontent) {
                     } else if (key === 'server') {
                         // server
                         scs.push({ table: prjstorage.TableType.DEVICES, name: key, value: prjcontent[key] });
-                    } else if (key === 'texts') {
+                    }   else if (key === 'settings') {
+                        // server
+                        scs.push({ table: prjstorage.TableType.GENERAL, name: key, value: prjcontent[key] });
+                    }
+                    else if (key === 'texts') {
                         // texts
                         var texts = prjcontent[key];
                         if (texts && texts.length) {
@@ -407,7 +425,7 @@ function setProject(prjcontent) {
                             for (var i = 0; i < alarms.length; i++) {
                                 scs.push({ table: prjstorage.TableType.ALARMS, name: alarms[i].name, value: alarms[i] });
                             }
-                        }                        
+                        }
                     } else {
                         // charts, version
                         scs.push({ table: prjstorage.TableType.GENERAL, name: key, value: prjcontent[key] });
@@ -459,7 +477,7 @@ function getDeviceProperty(query) {
 }
 
 /**
- * Get the texts 
+ * Get the texts
  */
 function getTexts() {
     return new Promise(function (resolve, reject) {
@@ -481,7 +499,7 @@ function getTexts() {
 }
 
 /**
- * Get the alarms 
+ * Get the alarms
  */
 function getAlarms() {
     return new Promise(function (resolve, reject) {
@@ -586,22 +604,22 @@ const ProjectDataCmdType = {
     HmiLayout: 'layout',
     Charts: 'charts',
     SetText: 'set-text',
-    SetText: 'set-text',
     DelText: 'del-text',
     SetAlarm: 'set-alarm',
     DelAlarm: 'del-alarm',
+    Settings: 'settings',
 }
 
 module.exports = {
-    init: init,
-    load: load,
-    getDevices: getDevices,
-    getAlarms: getAlarms,
-    getDeviceProperty: getDeviceProperty,
-    setDeviceProperty: setDeviceProperty,
-    setProjectData: setProjectData,
-    getProject: getProject,
-    setProject: setProject,
-    getProjectDemo: getProjectDemo,
-    ProjectDataCmdType, ProjectDataCmdType,
+    init,
+    load,
+    getDevices,
+    getAlarms,
+    getDeviceProperty,
+    setDeviceProperty,
+    setProjectData,
+    getProject,
+    setProject,
+    getProjectDemo,
+    ProjectDataCmdType,
 };
