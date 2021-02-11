@@ -528,9 +528,9 @@
     "alarms.view-group": "Группа",
     "alarms.view-status": "Статус",
     "alarms.view-type": "Приоритет",
-    "alarm.status-active": "Активно",
-    "alarm.status-passive": "Пассивно",
-    "alarm.status-active-ack": "Актив-ACK",
+    "alarm.status-active": "G",
+    "alarm.status-passive": "R",
+    "alarm.status-active-ack": "ACK",
 
     "texts.list-title": "Настройки текста",
     "texts.list-filter": "Фильтр",
