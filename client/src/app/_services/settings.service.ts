@@ -12,7 +12,7 @@ export class SettingsService {
 
     private appSettings = new AppSettings();
 
-    constructor(private fuxaLanguage: TranslateService, private projectService: ProjectService) {
+    constructor(private translateService: TranslateService, private projectService: ProjectService) {
         projectService.onLoadHmi.subscribe((res) => {
             this.appSettings = projectService.getProject().settings || new AppSettings();
             if (this.appSettings.language) {
@@ -23,9 +23,9 @@ export class SettingsService {
 
     init() {
         // this language will be used as a fallback when a translation isn't found in the current language
-        this.fuxaLanguage.setDefaultLang('en');
+        this.translateService.setDefaultLang('en');
         // the lang to use, if the lang isn't available, it will use the current loader to get them
-        this.fuxaLanguage.use('en');
+        this.translateService.use('en');
         // to load saved settings
         this.useLanguage(this.appSettings.language);
     }
@@ -37,10 +37,11 @@ export class SettingsService {
     setSettings(settings, nosave?: boolean) {
         this.appSettings = settings;
         this.projectService.setSettings(this.appSettings, nosave);
-        this.fuxaLanguage.use(this.appSettings.language);
+        this.translateService.use(this.appSettings.language);
     }
 
     useLanguage(language) {
-        this.fuxaLanguage.use(language);
+        console.log('useLanguage', language)
+        this.translateService.use(language);
     }
 }

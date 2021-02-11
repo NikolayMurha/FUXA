@@ -36,12 +36,6 @@ export class AlarmViewComponent implements OnInit, AfterViewInit, OnDestroy {
         private hmiService: HmiService) { }
 
     ngOnInit() {
-        Object.keys(this.statusText).forEach(key => {
-            this.translateService.get(this.statusText[key]).subscribe((txt: string) => { this.statusText[key] = txt });
-        });
-        Object.keys(this.priorityText).forEach(key => {
-            this.translateService.get(this.priorityText[key]).subscribe((txt: string) => { this.priorityText[key] = txt });
-        });
     }
 
     ngAfterViewInit() {

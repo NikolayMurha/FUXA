@@ -3261,9 +3261,9 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var SettingsService = /** @class */ (function () {
-    function SettingsService(fuxaLanguage, projectService) {
+    function SettingsService(translateService, projectService) {
         var _this = this;
-        this.fuxaLanguage = fuxaLanguage;
+        this.translateService = translateService;
         this.projectService = projectService;
         this.appSettings = new _models_settings__WEBPACK_IMPORTED_MODULE_2__["AppSettings"]();
         projectService.onLoadHmi.subscribe(function (res) {
@@ -3275,9 +3275,9 @@ var SettingsService = /** @class */ (function () {
     }
     SettingsService.prototype.init = function () {
         // this language will be used as a fallback when a translation isn't found in the current language
-        this.fuxaLanguage.setDefaultLang('en');
+        this.translateService.setDefaultLang('en');
         // the lang to use, if the lang isn't available, it will use the current loader to get them
-        this.fuxaLanguage.use('en');
+        this.translateService.use('en');
         // to load saved settings
         this.useLanguage(this.appSettings.language);
     };
@@ -3287,10 +3287,11 @@ var SettingsService = /** @class */ (function () {
     SettingsService.prototype.setSettings = function (settings, nosave) {
         this.appSettings = settings;
         this.projectService.setSettings(this.appSettings, nosave);
-        this.fuxaLanguage.use(this.appSettings.language);
+        this.translateService.use(this.appSettings.language);
     };
     SettingsService.prototype.useLanguage = function (language) {
-        this.fuxaLanguage.use(language);
+        console.log('useLanguage', language);
+        this.translateService.use(language);
     };
     SettingsService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
@@ -3755,7 +3756,7 @@ module.exports = ".header-panel {\n    /* z-index: 9999 !important; */\n    posi
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"header-panel\" *ngIf=\"fullview\">\n    {{'alarms.view-title' | translate}}\n</div>\n<div class=\"work-panel\" [ngStyle]=\"{'top': fullview ? '40px' : '0px'}\">\n    <mat-table #table [dataSource]=\"dataSource\" matSort matSortActive=\"ontime\" matSortDirection=\"asc\">\n        <ng-container matColumnDef=\"ontime\">\n            <mat-header-cell *matHeaderCellDef mat-sort-header> {{'alarms.view-ontime' | translate}} </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" [style.color]=\"element.color\"> {{element.ontime | date: 'yyyy.MM.dd HH:mm:ss'}} </mat-cell>\n        </ng-container>\n        <ng-container matColumnDef=\"text\">\n            <mat-header-cell *matHeaderCellDef mat-sort-header> {{'alarms.view-text' | translate}} </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" [style.color]=\"element.color\"> {{element.text}} </mat-cell>\n        </ng-container>\n        <ng-container matColumnDef=\"type\">\n            <mat-header-cell *matHeaderCellDef mat-sort-header> {{'alarms.view-type' | translate}} </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" [style.color]=\"element.color\"> {{element.type}}</mat-cell>\n        </ng-container>\n        <ng-container matColumnDef=\"group\">\n            <mat-header-cell *matHeaderCellDef mat-sort-header> {{'alarms.view-group' | translate}} </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" [style.color]=\"element.color\"> {{element.group}}</mat-cell>\n        </ng-container>\n        <ng-container matColumnDef=\"status\">\n            <mat-header-cell *matHeaderCellDef mat-sort-header> {{'alarms.view-status' | translate}} </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" [style.color]=\"element.color\"> {{element.status}} </mat-cell>\n        </ng-container>\n        <ng-container matColumnDef=\"ack\">\n            <mat-header-cell *matHeaderCellDef>\n                <div class=\"header-tools\" *ngIf=\"!fullview\">\n                    <div (click)=\"$event.stopPropagation();onShowMode('expand')\" *ngIf=\"currentShowMode === 'collapse'\" style=\"cursor: pointer;\">\n                        <mat-icon>vertical_align_top</mat-icon>\n                    </div>\n                    <div (click)=\"$event.stopPropagation();onShowMode('collapse')\" *ngIf=\"currentShowMode === 'expand'\" style=\"cursor: pointer;\">\n                        <mat-icon>vertical_align_bottom</mat-icon>\n                    </div>\n                    <div (click)=\"onClose();$event.stopPropagation()\" style=\"cursor: pointer;\">\n                        <mat-icon>clear</mat-icon>\n                    </div>\n                </div>\n            </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" [style.color]=\"element.color\">\n                <button mat-icon-button (click)=\"onAckAlarm(element)\" *ngIf=\"element.toack >= 0\" [disabled]=\"element.toack == 0\" class=\"remove\">\n                    <mat-icon>check_circle_outline</mat-icon>\n                </button>\n            </mat-cell>\n        </ng-container>\n        <mat-header-row *matHeaderRowDef=\"displayedColumns;sticky: true\"></mat-header-row>\n        <mat-row *matRowDef=\"let element; columns: displayedColumns;\" class=\"my-mat-row\"\n                        [style.background-color]=\"element.bkcolor\"></mat-row>\n    </mat-table>\n</div>\n"
+module.exports = "<div class=\"header-panel\" *ngIf=\"fullview\">\n    {{'alarms.view-title' | translate}}\n</div>\n<div class=\"work-panel\" [ngStyle]=\"{'top': fullview ? '40px' : '0px'}\">\n    <mat-table #table [dataSource]=\"dataSource\" matSort matSortActive=\"ontime\" matSortDirection=\"asc\">\n        <ng-container matColumnDef=\"ontime\">\n            <mat-header-cell *matHeaderCellDef mat-sort-header> {{'alarms.view-ontime' | translate}} </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" [style.color]=\"element.color\"> {{element.ontime | date: 'yyyy.MM.dd HH:mm:ss'}} </mat-cell>\n        </ng-container>\n        <ng-container matColumnDef=\"text\">\n            <mat-header-cell *matHeaderCellDef mat-sort-header> {{'alarms.view-text' | translate}} </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" [style.color]=\"element.color\"> {{element.text}} </mat-cell>\n        </ng-container>\n        <ng-container matColumnDef=\"type\">\n            <mat-header-cell *matHeaderCellDef mat-sort-header> {{'alarms.view-type' | translate}} </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" [style.color]=\"element.color\"> {{element.type | translate}}</mat-cell>\n        </ng-container>\n        <ng-container matColumnDef=\"group\">\n            <mat-header-cell *matHeaderCellDef mat-sort-header> {{'alarms.view-group' | translate}} </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" [style.color]=\"element.color\"> {{element.group}}</mat-cell>\n        </ng-container>\n        <ng-container matColumnDef=\"status\">\n            <mat-header-cell *matHeaderCellDef mat-sort-header> {{'alarms.view-status' | translate}} </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" [style.color]=\"element.color\"> {{element.status | translate }} </mat-cell>\n        </ng-container>\n        <ng-container matColumnDef=\"ack\">\n            <mat-header-cell *matHeaderCellDef>\n                <div class=\"header-tools\" *ngIf=\"!fullview\">\n                    <div (click)=\"$event.stopPropagation();onShowMode('expand')\" *ngIf=\"currentShowMode === 'collapse'\" style=\"cursor: pointer;\">\n                        <mat-icon>vertical_align_top</mat-icon>\n                    </div>\n                    <div (click)=\"$event.stopPropagation();onShowMode('collapse')\" *ngIf=\"currentShowMode === 'expand'\" style=\"cursor: pointer;\">\n                        <mat-icon>vertical_align_bottom</mat-icon>\n                    </div>\n                    <div (click)=\"onClose();$event.stopPropagation()\" style=\"cursor: pointer;\">\n                        <mat-icon>clear</mat-icon>\n                    </div>\n                </div>\n            </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" [style.color]=\"element.color\">\n                <button mat-icon-button (click)=\"onAckAlarm(element)\" *ngIf=\"element.toack >= 0\" [disabled]=\"element.toack == 0\" class=\"remove\">\n                    <mat-icon>check_circle_outline</mat-icon>\n                </button>\n            </mat-cell>\n        </ng-container>\n        <mat-header-row *matHeaderRowDef=\"displayedColumns;sticky: true\"></mat-header-row>\n        <mat-row *matRowDef=\"let element; columns: displayedColumns;\" class=\"my-mat-row\"\n                        [style.background-color]=\"element.bkcolor\"></mat-row>\n    </mat-table>\n</div>\n"
 
 /***/ }),
 
@@ -3808,13 +3809,6 @@ var AlarmViewComponent = /** @class */ (function () {
         this.destroy = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
     }
     AlarmViewComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        Object.keys(this.statusText).forEach(function (key) {
-            _this.translateService.get(_this.statusText[key]).subscribe(function (txt) { _this.statusText[key] = txt; });
-        });
-        Object.keys(this.priorityText).forEach(function (key) {
-            _this.translateService.get(_this.priorityText[key]).subscribe(function (txt) { _this.priorityText[key] = txt; });
-        });
     };
     AlarmViewComponent.prototype.ngAfterViewInit = function () {
         this.dataSource.sort = this.sort;
