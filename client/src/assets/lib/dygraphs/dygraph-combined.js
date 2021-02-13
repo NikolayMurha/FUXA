@@ -1639,7 +1639,7 @@ DygraphCanvasRenderer._errorPlotter = function(e) {
  * Proxy for CanvasRenderingContext2D which drops moveTo/lineTo calls which are
  * superfluous. It accumulates all movements which haven't changed the x-value
  * and only applies the two with the most extreme y-values.
- * 
+ *
  * Calls to lineTo/moveTo must have non-decreasing x-values.
  */
 DygraphCanvasRenderer._fastCanvasProxy = function(context) {
@@ -2162,7 +2162,7 @@ Dygraph.SHORT_MONTH_NAMES_ = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', '
 
 /**
  * Convert a JS date to a string appropriate to display on an axis that
- * is displaying values at the stated granularity. This respects the 
+ * is displaying values at the stated granularity. This respects the
  * labelsUTC option.
  * @param {Date} date The date to format
  * @param {number} granularity One of the Dygraph granularity constants
@@ -2200,7 +2200,7 @@ Dygraph.dateAxisLabelFormatter = function(date, granularity, opts) {
 Dygraph.dateAxisFormatter = Dygraph.dateAxisLabelFormatter;
 
 /**
- * Return a string version of a JS date for a value label. This respects the 
+ * Return a string version of a JS date for a value label. This respects the
  * labelsUTC option.
  * @param {Date} date The date to be formatted
  * @param {Dygraph} opts An options view
@@ -3980,7 +3980,7 @@ Dygraph.prototype.mouseMove_ = function(event) {
 };
 
 /**
- * Fetch left offset from the specified set index or if not passed, the 
+ * Fetch left offset from the specified set index or if not passed, the
  * first defined boundaryIds record (see bug #236).
  * @private
  */
@@ -4138,7 +4138,7 @@ Dygraph.prototype.setSelection = function(row, opt_seriesName, opt_locked) {
       // for.  If it is, just use it, otherwise search the array for a point
       // in the proper place.
       var setRow = row - this.getLeftBoundary_(setIdx);
-      if (setRow < points.length && points[setRow].idx == row) {
+      if (setRow > 0 && setRow < points.length && points[setRow].idx == row) {
         var point = points[setRow];
         if (point.yval !== null) this.selPoints_.push(point);
       } else {
@@ -4322,7 +4322,7 @@ Dygraph.prototype.getHandlerClass_ = function() {
  */
 Dygraph.prototype.predraw_ = function() {
   var start = new Date();
-  
+
 
   // Create the correct dataHandler
   this.dataHandler_ = new (this.getHandlerClass_())();
@@ -4363,7 +4363,7 @@ Dygraph.prototype.predraw_ = function() {
     if (this.rollPeriod_ > 1) {
       series = this.dataHandler_.rollingAverage(series, this.rollPeriod_, this.attributes_);
     }
-    
+
     this.rolledSeries_.push(series);
   }
 
@@ -4522,7 +4522,7 @@ Dygraph.prototype.gatherDatasets_ = function(rolledSeries, dateWindow) {
   var seriesIdx, sampleIdx;
   var firstIdx, lastIdx;
   var axisIdx;
-  
+
   // Loop over the fields (series).  Go from the last to the first,
   // because if they're stacked that's how we accumulate the values.
   var num_series = rolledSeries.length - 1;
@@ -4540,7 +4540,7 @@ Dygraph.prototype.gatherDatasets_ = function(rolledSeries, dateWindow) {
 
       // TODO(danvk): do binary search instead of linear search.
       // TODO(danvk): pass firstIdx and lastIdx directly to the renderer.
-      firstIdx = null; 
+      firstIdx = null;
       lastIdx = null;
       for (sampleIdx = 0; sampleIdx < series.length; sampleIdx++) {
         if (series[sampleIdx][0] >= low && firstIdx === null) {
@@ -4574,9 +4574,9 @@ Dygraph.prototype.gatherDatasets_ = function(rolledSeries, dateWindow) {
       if (correctedLastIdx !== lastIdx) {
         lastIdx = correctedLastIdx;
       }
-      
+
       boundaryIds[seriesIdx-1] = [firstIdx, lastIdx];
-      
+
       // .slice's end is exclusive, we want to include lastIdx.
       series = series.slice(firstIdx, lastIdx + 1);
     } else {
@@ -4585,10 +4585,10 @@ Dygraph.prototype.gatherDatasets_ = function(rolledSeries, dateWindow) {
     }
 
     var seriesName = this.attr_("labels")[seriesIdx];
-    var seriesExtremes = this.dataHandler_.getExtremeYValues(series, 
+    var seriesExtremes = this.dataHandler_.getExtremeYValues(series,
         dateWindow, this.getBooleanOption("stepPlot",seriesName));
 
-    var seriesPoints = this.dataHandler_.seriesToPoints(series, 
+    var seriesPoints = this.dataHandler_.seriesToPoints(series,
         seriesName, boundaryIds[seriesIdx-1][0]);
 
     if (this.getBooleanOption("stackedGraph")) {
@@ -4803,7 +4803,7 @@ Dygraph.prototype.computeYAxisRanges_ = function(extremes) {
   };
   var numAxes = this.attributes_.numAxes();
   var ypadCompat, span, series, ypad;
-  
+
   var p_axis;
 
   // Compute extreme values, a span and tick marks for each axis.
@@ -4929,8 +4929,8 @@ Dygraph.prototype.computeYAxisRanges_ = function(extremes) {
     } else {
       axis.computedValueRange = axis.extremeRange;
     }
-    
-    
+
+
     if (independentTicks) {
       axis.independentTicks = independentTicks;
       var opts = this.optionsViewForAxis_('y' + (i ? '2' : ''));
@@ -4952,7 +4952,7 @@ Dygraph.prototype.computeYAxisRanges_ = function(extremes) {
   // independent ticks, then that is permissible as well.
   for (var i = 0; i < numAxes; i++) {
     var axis = this.axes_[i];
-    
+
     if (!axis.independentTicks) {
       var opts = this.optionsViewForAxis_('y' + (i ? '2' : ''));
       var ticker = opts('ticker');
@@ -6156,7 +6156,7 @@ Dygraph.zeropad = function(x) {
 };
 
 /**
- * Date accessors to get the parts of a calendar date (year, month, 
+ * Date accessors to get the parts of a calendar date (year, month,
  * day, hour, minute, second and millisecond) according to local time,
  * and factory method to call the Date constructor with an array of arguments.
  */
@@ -6175,7 +6175,7 @@ Dygraph.DateAccessorsLocal = {
 };
 
 /**
- * Date accessors to get the parts of a calendar date (year, month, 
+ * Date accessors to get the parts of a calendar date (year, month,
  * day of month, hour, minute, second and millisecond) according to UTC time,
  * and factory method to call the Date constructor with an array of arguments.
  */
@@ -7160,7 +7160,7 @@ Dygraph.Interaction.startPan = function(event, g, context) {
     context.initialLeftmostDate = Dygraph.log10(xRange[0]);
     context.dateRange = Dygraph.log10(xRange[1]) - Dygraph.log10(xRange[0]);
   } else {
-    context.initialLeftmostDate = xRange[0];    
+    context.initialLeftmostDate = xRange[0];
     context.dateRange = xRange[1] - xRange[0];
   }
   context.xUnitsPerPixel = context.dateRange / (g.plotter_.area.w - 1);
@@ -7259,7 +7259,7 @@ Dygraph.Interaction.movePan = function(event, g, context) {
     g.dateWindow_ = [ Math.pow(Dygraph.LOG_SCALE, minDate),
                       Math.pow(Dygraph.LOG_SCALE, maxDate) ];
   } else {
-    g.dateWindow_ = [minDate, maxDate];    
+    g.dateWindow_ = [minDate, maxDate];
   }
 
   // y-axis scaling is automatic unless this is a full 2D pan.
@@ -7621,7 +7621,7 @@ Dygraph.Interaction.moveTouch = function(event, g, context) {
     ];
     didZoom = true;
   }
-  
+
   if (context.touchDirections.y) {
     for (i = 0; i < 1  /*g.axes_.length*/; i++) {
       var axis = g.axes_[i];
@@ -8227,7 +8227,7 @@ Dygraph.getDateAxis = function(start_time, end_time, granularity, opts, dg) {
     // This will put the ticks on Sundays.
     start_date_offset = accessors.getDay(start_date);
   }
-  
+
   date_array[datefield] -= start_date_offset;
   for (var df = datefield + 1; df < Dygraph.NUM_DATEFIELDS; df++) {
     // The minimum value is 1 for the day of month, and 0 for all other fields.
@@ -8592,7 +8592,7 @@ axes.prototype.willDrawChart = function(e) {
       !g.getOptionForAxis('drawAxis', 'y2')) {
     return;
   }
-  
+
   // Round pixels to half-integer boundaries for crisper drawing.
   function halfUp(x)  { return Math.round(x) + 0.5; }
   function halfDown(y){ return Math.round(y) - 0.5; }
@@ -9482,7 +9482,7 @@ generateLegendDashHTML = function(strokePattern, color, oneEmWidth) {
   var normalizedPattern = [];
   var loop;
 
-  // Compute the length of the pixels including the first segment twice, 
+  // Compute the length of the pixels including the first segment twice,
   // since we repeat it.
   for (i = 0; i <= strokePattern.length; i++) {
     strokePixelLength += strokePattern[i%strokePattern.length];
@@ -9716,7 +9716,7 @@ rangeSelector.prototype.resize_ = function() {
   }
 
   var plotArea = this.dygraph_.layout_.getPlotArea();
-  
+
   var xAxisLabelHeight = 0;
   if (this.dygraph_.getOptionForAxis('drawAxis', 'x')) {
     xAxisLabelHeight = this.getOption_('xAxisHeight') || (this.getOption_('axisLabelFontSize') + 2 * this.getOption_('axisTickSize'));
@@ -10220,7 +10220,7 @@ rangeSelector.prototype.computeCombinedSeriesAndLimits_ = function() {
     if (g.rollPeriod() > 1) {
       series = dataHandler.rollingAverage(series, g.rollPeriod(), options);
     }
-    
+
     rolledSeries.push(series);
   }
 
@@ -11306,42 +11306,42 @@ Dygraph.OPTIONS_REFERENCE =  // <JSON>
 /**
  * @fileoverview This file contains the managment of data handlers
  * @author David Eberlein (david.eberlein@ch.sauter-bc.com)
- * 
+ *
  * The idea is to define a common, generic data format that works for all data
  * structures supported by dygraphs. To make this possible, the DataHandler
  * interface is introduced. This makes it possible, that dygraph itself can work
  * with the same logic for every data type independent of the actual format and
- * the DataHandler takes care of the data format specific jobs. 
+ * the DataHandler takes care of the data format specific jobs.
  * DataHandlers are implemented for all data types supported by Dygraphs and
  * return Dygraphs compliant formats.
  * By default the correct DataHandler is chosen based on the options set.
  * Optionally the user may use his own DataHandler (similar to the plugin
  * system).
- * 
- * 
- * The unified data format returend by each handler is defined as so: 
- * series[n][point] = [x,y,(extras)] 
- * 
+ *
+ *
+ * The unified data format returend by each handler is defined as so:
+ * series[n][point] = [x,y,(extras)]
+ *
  * This format contains the common basis that is needed to draw a simple line
  * series extended by optional extras for more complex graphing types. It
  * contains a primitive x value as first array entry, a primitive y value as
  * second array entry and an optional extras object for additional data needed.
- * 
+ *
  * x must always be a number.
  * y must always be a number, NaN of type number or null.
  * extras is optional and must be interpreted by the DataHandler. It may be of
- * any type. 
- * 
+ * any type.
+ *
  * In practice this might look something like this:
  * default: [x, yVal]
  * errorBar / customBar: [x, yVal, [yTopVariance, yBottomVariance] ]
- * 
+ *
  */
 /*global Dygraph:false */
 /*global DygraphLayout:false */
 
 /**
- * 
+ *
  * The data handler is responsible for all data specific operations. All of the
  * series data it receives and returns is always in the unified data format.
  * Initially the unified data is created by the extractSeries method
@@ -11389,14 +11389,14 @@ handler.EXTRAS = 2;
  * This is where undesirable points (i.e. negative values on log scales and
  * missing values through which we wish to connect lines) are dropped.
  * TODO(danvk): the "missing values" bit above doesn't seem right.
- * 
- * @param {!Array.<Array>} rawData The raw data passed into dygraphs where 
+ *
+ * @param {!Array.<Array>} rawData The raw data passed into dygraphs where
  *     rawData[i] = [x,ySeries1,...,ySeriesN].
  * @param {!number} seriesIndex Index of the series to extract. All other
  *     series should be ignored.
  * @param {!DygraphOptions} options Dygraph options.
  * @return {Array.<[!number,?number,?]>} The series in the unified data format
- *     where series[i] = [x,y,{extras}]. 
+ *     where series[i] = [x,y,{extras}].
  */
 handler.prototype.extractSeries = function(rawData, seriesIndex, options) {
 };
@@ -11404,8 +11404,8 @@ handler.prototype.extractSeries = function(rawData, seriesIndex, options) {
 /**
  * Converts a series to a Point array.  The resulting point array must be
  * returned in increasing order of idx property.
- * 
- * @param {!Array.<[!number,?number,?]>} series The series in the unified 
+ *
+ * @param {!Array.<[!number,?number,?]>} series The series in the unified
  *          data format where series[i] = [x,y,{extras}].
  * @param {!string} setName Name of the series.
  * @param {!number} boundaryIdStart Index offset of the first point, equal to the
@@ -11444,10 +11444,10 @@ handler.prototype.seriesToPoints = function(series, setName, boundaryIdStart) {
  * Here data may be added to the seriesPoints which is needed by the plotters.
  * The indexes of series and points are in sync meaning the original data
  * sample for series[i] is points[i].
- * 
- * @param {!Array.<[!number,?number,?]>} series The series in the unified 
+ *
+ * @param {!Array.<[!number,?number,?]>} series The series in the unified
  *     data format where series[i] = [x,y,{extras}].
- * @param {!Array.<Dygraph.PointType>} points The corresponding points passed 
+ * @param {!Array.<Dygraph.PointType>} points The corresponding points passed
  *     to the plotter.
  * @protected
  */
@@ -11456,8 +11456,8 @@ handler.prototype.onPointsCreated_ = function(series, points) {
 
 /**
  * Calculates the rolling average of a data set.
- * 
- * @param {!Array.<[!number,?number,?]>} series The series in the unified 
+ *
+ * @param {!Array.<[!number,?number,?]>} series The series in the unified
  *          data format where series[i] = [x,y,{extras}].
  * @param {!number} rollPeriod The number of points over which to average the data
  * @param {!DygraphOptions} options The dygraph options.
@@ -11468,10 +11468,10 @@ handler.prototype.rollingAverage = function(series, rollPeriod, options) {
 
 /**
  * Computes the range of the data series (including confidence intervals).
- * 
- * @param {!Array.<[!number,?number,?]>} series The series in the unified 
+ *
+ * @param {!Array.<[!number,?number,?]>} series The series in the unified
  *     data format where series[i] = [x, y, {extras}].
- * @param {!Array.<number>} dateWindow The x-value range to display with 
+ * @param {!Array.<number>} dateWindow The x-value range to display with
  *     the format: [min, max].
  * @param {!DygraphOptions} options The dygraph options.
  * @return {Array.<number>} The low and high extremes of the series in the
@@ -11484,8 +11484,8 @@ handler.prototype.getExtremeYValues = function(series, dateWindow, options) {
  * Callback called for each series after the layouting data has been
  * calculated before the series is drawn. Here normalized positioning data
  * should be calculated for the extras of each point.
- * 
- * @param {!Array.<Dygraph.PointType>} points The points passed to 
+ *
+ * @param {!Array.<Dygraph.PointType>} points The points passed to
  *          the plotter.
  * @param {!Object} axis The axis on which the series will be plotted.
  * @param {!boolean} logscale Weather or not to use a logscale.
@@ -11496,7 +11496,7 @@ handler.prototype.onLineEvaluated = function(points, axis, logscale) {
 /**
  * Helper method that computes the y value of a line defined by the points p1
  * and p2 and a given x value.
- * 
+ *
  * @param {!Array.<number>} p1 left point ([x,y]).
  * @param {!Array.<number>} p2 right point ([x,y]).
  * @param {!number} xValue The x value to compute the y-intersection for.
@@ -11514,12 +11514,12 @@ handler.prototype.computeYInterpolation_ = function(p1, p2, xValue) {
 /**
  * Helper method that returns the first and the last index of the given series
  * that lie inside the given dateWindow.
- * 
- * @param {!Array.<[!number,?number,?]>} series The series in the unified 
+ *
+ * @param {!Array.<[!number,?number,?]>} series The series in the unified
  *     data format where series[i] = [x,y,{extras}].
- * @param {!Array.<number>} dateWindow The x-value range to display with 
+ * @param {!Array.<number>} dateWindow The x-value range to display with
  *     the format: [min,max].
- * @return {!Array.<[!number,?number,?]>} The samples of the series that 
+ * @return {!Array.<[!number,?number,?]>} The samples of the series that
  *     are in the given date window.
  * @private
  */
@@ -11689,7 +11689,7 @@ DefaultHandler.prototype.getExtremeYValues = function(series, dateWindow,
  */
 Dygraph.DataHandlers.DefaultFractionHandler = function() {
 };
-  
+
 var DefaultFractionHandler = Dygraph.DataHandlers.DefaultFractionHandler;
 DefaultFractionHandler.prototype = new Dygraph.DataHandlers.DefaultHandler();
 
@@ -11761,7 +11761,7 @@ DefaultFractionHandler.prototype.rollingAverage = function(originalData, rollPer
  */
 
 /**
- * @fileoverview DataHandler base implementation for the "bar" 
+ * @fileoverview DataHandler base implementation for the "bar"
  * data formats. This implementation must be extended and the
  * extractSeries and rollingAverage must be implemented.
  * @author David Eberlein (david.eberlein@ch.sauter-bc.com)
@@ -11789,13 +11789,13 @@ var BarsHandler = Dygraph.DataHandlers.BarsHandler;
 //   (I get closure compiler errors if this isn't here.)
 /**
  * @override
- * @param {!Array.<Array>} rawData The raw data passed into dygraphs where 
+ * @param {!Array.<Array>} rawData The raw data passed into dygraphs where
  *     rawData[i] = [x,ySeries1,...,ySeriesN].
  * @param {!number} seriesIndex Index of the series to extract. All other
  *     series should be ignored.
  * @param {!DygraphOptions} options Dygraph options.
  * @return {Array.<[!number,?number,?]>} The series in the unified data format
- *     where series[i] = [x,y,{extras}]. 
+ *     where series[i] = [x,y,{extras}].
  */
 BarsHandler.prototype.extractSeries = function(rawData, seriesIndex, options) {
   // Not implemented here must be extended
@@ -11803,7 +11803,7 @@ BarsHandler.prototype.extractSeries = function(rawData, seriesIndex, options) {
 
 /**
  * @override
- * @param {!Array.<[!number,?number,?]>} series The series in the unified 
+ * @param {!Array.<[!number,?number,?]>} series The series in the unified
  *          data format where series[i] = [x,y,{extras}].
  * @param {!number} rollPeriod The number of points over which to average the data
  * @param {!DygraphOptions} options The dygraph options.
@@ -11954,7 +11954,7 @@ CustomBarsHandler.prototype.rollingAverage =
     if (count) {
       rollingData[i] = [
           originalData[i][0],
-          1.0 * mid / count, 
+          1.0 * mid / count,
           [ 1.0 * low / count,
             1.0 * high / count ] ];
     } else {
@@ -12075,7 +12075,7 @@ ErrorBarsHandler.prototype.rollingAverage =
  */
 
 /**
- * @fileoverview DataHandler implementation for the combination 
+ * @fileoverview DataHandler implementation for the combination
  * of error bars and fractions options.
  * @author David Eberlein (david.eberlein@ch.sauter-bc.com)
  */
@@ -12172,7 +12172,7 @@ FractionsBarsHandler.prototype.rollingAverage =
       }
     } else {
       stddev = den ? sigma * Math.sqrt(value * (1 - value) / den) : 1.0;
-      rollingData[i] = [ date, mult * value, 
+      rollingData[i] = [ date, mult * value,
                          [ mult * (value - stddev), mult * (value + stddev) ] ];
     }
   }
