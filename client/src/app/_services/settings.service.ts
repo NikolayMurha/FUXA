@@ -1,9 +1,11 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import {TranslateService} from '@ngx-translate/core';
-
-import {AppSettings} from '../_models/settings';
-import {ProjectService} from "./project.service";
+import { environment } from '../../environments/environment';
+import { TranslateService } from '@ngx-translate/core';
+import { EndPointApi } from '../_helpers/endpointapi';
+import { ToastrService } from 'ngx-toastr';
+import { AppSettings } from '../_models/settings';
 
 @Injectable({
     providedIn: 'root'
@@ -11,14 +13,12 @@ import {ProjectService} from "./project.service";
 export class SettingsService {
 
     private appSettings = new AppSettings();
+    private endPointConfig: string = EndPointApi.getURL();
 
-    constructor(private translateService: TranslateService, private projectService: ProjectService) {
-        projectService.onLoadHmi.subscribe((res) => {
-            this.appSettings = projectService.getProject().settings || new AppSettings();
-            if (this.appSettings.language) {
-                this.useLanguage(this.appSettings.language);
-            }
-        })
+    constructor(private http: HttpClient,
+        private fuxaLanguage: TranslateService,
+        private translateService: TranslateService,
+        private toastr: ToastrService) { 
     }
 
     init() {
@@ -27,21 +27,59 @@ export class SettingsService {
         // the lang to use, if the lang isn't available, it will use the current loader to get them
         this.translateService.use('en');
         // to load saved settings
-        this.useLanguage(this.appSettings.language);
+        if (environment.serverEnabled) {
+            this.http.get<any>(this.endPointConfig + '/api/settings').subscribe(result => {
+                this.setSettings(result);
+            }, error => {
+                console.error('settings.service err: ' + error);
+            });
+        }
+        // this.setLanguage(this.appSettings.language);
     }
 
     getSettings() {
         return this.appSettings;
     }
 
-    setSettings(settings, nosave?: boolean) {
-        this.appSettings = settings;
-        this.projectService.setSettings(this.appSettings, nosave);
-        this.translateService.use(this.appSettings.language);
+    setSettings(settings: AppSettings) {
+        var dirty = false;
+        if (settings.language && settings.language != this.appSettings.language) {
+            this.fuxaLanguage.use(settings.language);
+            this.appSettings.language = settings.language;
+            dirty = true;
+        }
+        if (settings.uiPort && settings.uiPort != this.appSettings.uiPort) {
+            this.appSettings.uiPort = settings.uiPort;
+            dirty = true;
+        }
+        if (settings.secureEnabled != this.appSettings.secureEnabled || settings.tokenExpiresIn != this.appSettings.tokenExpiresIn) {
+            this.appSettings.secureEnabled = settings.secureEnabled;
+            this.appSettings.tokenExpiresIn = settings.tokenExpiresIn;
+            dirty = true;
+        }
+        return dirty;
     }
 
-    useLanguage(language) {
-        console.log('useLanguage', language)
-        this.translateService.use(language);
+    saveSettings() {
+        if (environment.serverEnabled) {
+            let header = new HttpHeaders({ 'Content-Type': 'application/json' });
+            this.http.post<AppSettings>(this.endPointConfig + '/api/settings', this.appSettings, { headers: header }).subscribe(result => {
+            }, err => {
+                this.notifySaveError(err);
+            });
+        }
+    }
+
+    private notifySaveError(err: any) {
+        let msg = '';
+        this.translateService.get('msg.settings-save-error').subscribe((txt: string) => { msg = txt });
+        if (err.status === 401) {
+            this.translateService.get('msg.settings-save-unauthorized').subscribe((txt: string) => { msg = txt });
+        }
+        this.toastr.error(msg, '', {
+            timeOut: 3000,
+            closeButton: true,
+            disableTimeOut: true
+        });
     }
 }
