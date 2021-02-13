@@ -368,17 +368,6 @@ export class ProjectService {
     }
     //#endregion
 
-    setSettings(settings: any, nosave?: boolean) {
-        this.projectData.settings = settings;
-        if (environment.serverEnabled) {
-            this.setServerProjectData(ProjectDataCmdType.Settings, settings).subscribe(result => {
-            }, err => {
-                this.notifySaveError(err);
-            });
-        }
-    }
-
-
     //#region Alarms resource
     /**
      * get alarms resource
@@ -389,7 +378,8 @@ export class ProjectService {
 
     /**
      * save the alarm to project
-     * @param text
+     * @param alarm
+     * @param old
      */
     setAlarm(alarm: Alarm, old: Alarm) {
         return new Observable((observer) => {

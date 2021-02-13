@@ -159,11 +159,6 @@ function setProjectData(cmd, value) {
                 section.name = cmd;
                 setCharts(value);
             }
-             else if (cmd === ProjectDataCmdType.Settings) {
-                section.table = prjstorage.TableType.GENERAL;
-                section.name = cmd;
-                setSettings(value);
-            }
             else if (cmd === ProjectDataCmdType.SetText) {
                 section.table = prjstorage.TableType.TEXTS;
                 section.name = value.name;
@@ -262,14 +257,6 @@ function removeDevice(device) {
  */
 function setHmiLayout(layout) {
     data.hmi.layout = layout;
-}
-
-/**
- * Set Settings
- * @param {*} settings
- */
-function setSettings(settings) {
-    data.settings = settings;
 }
 
 /**
@@ -406,9 +393,6 @@ function setProject(prjcontent) {
                     } else if (key === 'server') {
                         // server
                         scs.push({ table: prjstorage.TableType.DEVICES, name: key, value: prjcontent[key] });
-                    }   else if (key === 'settings') {
-                        // server
-                        scs.push({ table: prjstorage.TableType.GENERAL, name: key, value: prjcontent[key] });
                     }
                     else if (key === 'texts') {
                         // texts
@@ -607,7 +591,6 @@ const ProjectDataCmdType = {
     DelText: 'del-text',
     SetAlarm: 'set-alarm',
     DelAlarm: 'del-alarm',
-    Settings: 'settings',
 }
 
 module.exports = {
