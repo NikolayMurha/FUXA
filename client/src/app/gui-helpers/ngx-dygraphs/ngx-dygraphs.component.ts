@@ -1,12 +1,24 @@
-import { Component, Input, Output, ElementRef, OnInit, AfterViewInit, OnChanges, ViewChild, SimpleChanges, EventEmitter } from '@angular/core';
-import { ChangeDetectorRef  } from '@angular/core';
-import { DygraphOptions } from './dygraphOptions';
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChanges,
+    ViewChild
+} from '@angular/core';
+import {DygraphOptions} from './dygraphOptions';
 
-import { ChartRangeType, ChartRangeConverter } from '../../_models/chart';
-import { DaqQuery } from '../../_models/hmi';
-import { isUndefined } from 'util';
+import {ChartRangeConverter, ChartRangeType} from '../../_models/chart';
+import {DaqQuery} from '../../_models/hmi';
+import {isUndefined} from 'util';
 
 declare const Dygraph: any;
+
 @Component({
     selector: 'ngx-dygraphs',
     templateUrl: './ngx-dygraphs.component.html',
@@ -35,13 +47,14 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
     public isEditor = false;
     public rangeTypeValue = <ChartRangeType>Object.keys(ChartRangeType)[0];
     public rangeType: ChartRangeType;
-    public range = { from: Date.now(), to: Date.now() };
+    public range = {from: Date.now(), to: Date.now()};
 
     //   public chartWidth: number;
     //   public chartHeight: number;
     mapData = {};
 
     public dygraph: any;
+
     public defOptions: DygraphOptions = {
         // width: "auto",
         // height: "auto",
@@ -86,7 +99,7 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
                 if (this.defOptions['fontFamily']) {
                     this.chart.nativeElement.style.fontFamily = this.defOptions['fontFamily'];
                 }
-                let  ele = this.chart.nativeElement.getElementsByClassName('dygraph-legend');
+                let ele = this.chart.nativeElement.getElementsByClassName('dygraph-legend');
                 if (ele && ele.length) {
                     if (this.defOptions['legendFontSize'] >= 0) {
                         ele[0].style.fontSize = this.defOptions['legendFontSize'] + 'px';
@@ -107,11 +120,11 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
                     this.tempchart.nativeElement.style.backgroundColor = this.defOptions['colorBackground'];
                 }
                 if (this.defOptions['axisLabelColor']) {
-                    this.tempbord.nativeElement.style.borderColor  = this.defOptions['axisLabelColor'];
+                    this.tempbord.nativeElement.style.borderColor = this.defOptions['axisLabelColor'];
                 }
                 if (this.defOptions['gridLineColor']) {
-                    this.tempgridv.nativeElement.style.borderColor  = this.defOptions['gridLineColor'];
-                    this.tempgrido.nativeElement.style.borderColor  = this.defOptions['gridLineColor'];
+                    this.tempgridv.nativeElement.style.borderColor = this.defOptions['gridLineColor'];
+                    this.tempgrido.nativeElement.style.borderColor = this.defOptions['gridLineColor'];
                 }
             }
             if (this.defOptions['colorBackground']) {
@@ -155,6 +168,9 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
             options.legend = 'always';
         }
 
+
+        console.log(changes);
+
         // this.resize();
         // setTimeout(() => {
         //   this.dygraph = new Dygraph(this.chart.nativeElement, this.data, options);
@@ -165,37 +181,33 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
         // }, 500);
     }
 
-    onClick(ev) {
-        let msg = new DaqQuery();
-        msg.gid = this.id;
-        msg.event = ev;
-        if (ev === 'B') {           // back
-            this.range.to = new Date(this.range.from).getTime();
-            this.range.from = new Date(this.range.from).setTime(new Date(this.range.from).getTime() - (ChartRangeConverter.ChartRangeToHours(this.rangeTypeValue) * 60 * 60 * 1000));    
-        } else if (ev === 'F') {    // forward
-            this.range.from = new Date(this.range.to).getTime();
-            this.range.to = new Date(this.range.from).setTime(new Date(this.range.from).getTime() + (ChartRangeConverter.ChartRangeToHours(this.rangeTypeValue) * 60 * 60 * 1000));    
-        }
-        msg.sids = Object.keys(this.mapData);
-        msg.from = this.range.from;
-        msg.to = this.range.to;        
-        this.onTimeRange.emit(msg);
+    forward() {
+        this.setFrom(this.range.to);
+    }
+
+    backward() {
+        this.setFrom(this.range.from - (ChartRangeConverter.ChartRangeToHours(this.rangeTypeValue) * 60 * 60 * 1000));
+    }
+
+    setFrom(from) {
+        this.range.from = from
+        this.range.to = this.range.from + (ChartRangeConverter.ChartRangeToHours(this.rangeTypeValue) * 60 * 60 * 1000);
+        this.rangeChanged();
     }
 
     onRangeChanged(ev) {
         if (ev) {
-            this.range.from = Date.now();
-            this.range.to = Date.now();
-            this.range.from = new Date(this.range.from).setTime(new Date(this.range.from).getTime() - (ChartRangeConverter.ChartRangeToHours(ev) * 60 * 60 * 1000));
-
-            let msg = new DaqQuery();
-            msg.event = ev;
-            msg.gid = this.id;
-            msg.sids = Object.keys(this.mapData);
-            msg.from = this.range.from;
-            msg.to = this.range.to;
-            this.onTimeRange.emit(msg);
+            this.setFrom(Date.now());
         }
+    }
+
+    rangeChanged() {
+        let msg = new DaqQuery();
+        msg.gid = this.id;
+        msg.sids = Object.keys(this.mapData);
+        msg.from = this.range.from;
+        msg.to = this.range.to;
+        this.onTimeRange.emit(msg);
     }
 
 
@@ -212,7 +224,7 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
         chart.style.height = h + 'px';
         chart.style.width = w + 'px';
         if (this.dygraph) {
-            this.dygraph.updateOptions({ height: h, width: w });
+            this.dygraph.updateOptions({height: h, width: w});
             this.dygraph.resize(width, height);
         }
     }
@@ -246,13 +258,13 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
         }
     }
 
-    public addLine(id: string, name:string, color: string) {
+    public addLine(id: string, name: string, color: string) {
         if (!this.mapData[id]) {
             this.mapData[id] = this.options.labels.length;
             this.options.labels.push(name);
             this.options.colors.push(color);
             if (this.dygraph) {
-                this.dygraph.updateOptions({ labels: this.options.labels, colors: this.options.colors });
+                this.dygraph.updateOptions({labels: this.options.labels, colors: this.options.colors});
             }
         }
     }
@@ -274,7 +286,7 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
                 this.data.shift();
             }
             if (this.dygraph) {
-                this.dygraph.updateOptions({ file: this.data });
+                this.dygraph.updateOptions({file: this.data});
             }
         }
     }
@@ -282,14 +294,14 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
     public setValues(values) {
         this.data = values;
         if (this.dygraph) {
-            this.dygraph.updateOptions({ file: this.data, dateWindow: [this.range.from, this.range.to] });
+            this.dygraph.updateOptions({file: this.data, dateWindow: [this.range.from, this.range.to]});
         }
     }
 
     public clear() {
         this.data = [];
         if (this.dygraph) {
-            this.dygraph.updateOptions({ file: this.data });
+            this.dygraph.updateOptions({file: this.data});
         }
     }
 }

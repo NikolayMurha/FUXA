@@ -15,7 +15,7 @@ export class HtmlChartComponent extends GaugeBaseComponent implements OnInit {
     static TypeTag = "svg-ext-html_chart";
     static LabelTag = "HtmlChart";
     static prefixD = "D-HXC_";
-    
+
     constructor(private resolver: ComponentFactoryResolver) {
         super();
     }
@@ -61,7 +61,7 @@ export class HtmlChartComponent extends GaugeBaseComponent implements OnInit {
                 componentRef.changeDetectorRef.detectChanges();
                 const loaderComponentElement = componentRef.location.nativeElement;
                 htmlChart.appendChild(loaderComponentElement);
-                componentRef.instance.resize(htmlChart.clientHeight - ((componentRef.instance.withToolbar) ? 34 : 0), htmlChart.clientWidth);
+                componentRef.instance.resize(htmlChart.clientHeight - ((componentRef.instance.withToolbar) ? 68 : 0), htmlChart.clientWidth);
                 return componentRef.instance;
             }
         }
