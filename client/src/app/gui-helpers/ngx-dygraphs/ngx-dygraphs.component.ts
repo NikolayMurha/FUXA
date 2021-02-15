@@ -158,27 +158,9 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
         this.loadingInProgress = true;
         const options = Object.assign({}, this.options);
 
-        // if (!options.width) {
-        //   options.width = this.chartWidth;
-        // }
-        // if (!options.height) {
-        //   options.height = this.chartHeight;
-        // }
         if (!options.legend) {
             options.legend = 'always';
         }
-
-
-        console.log(changes);
-
-        // this.resize();
-        // setTimeout(() => {
-        //   this.dygraph = new Dygraph(this.chart.nativeElement, this.data, options);
-        //   this.loadingInProgress = false;
-        //   this.dygraph.ready(graph => {
-        //     this.watchRangeSelector(graph);
-        //   });
-        // }, 500);
     }
 
     forward() {
@@ -210,17 +192,10 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
         this.onTimeRange.emit(msg);
     }
 
-
     public resize(height?, width?) {
         let chart = this.chart.nativeElement;
-        let w = chart.parentNode.clientWidth;
-        let h = chart.parentNode.clientHeight;
-        if (height) {
-            h = height;
-        }
-        if (width) {
-            w = width;
-        }
+        let w = width || chart.parentNode.clientWidth;
+        let h = height || chart.parentNode.clientHeight;
         chart.style.height = h + 'px';
         chart.style.width = w + 'px';
         if (this.dygraph) {
