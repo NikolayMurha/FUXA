@@ -11,7 +11,6 @@ declare const Donut: any;
     styleUrls: ['./ngx-gauge.component.css']
 })
 export class NgxGaugeComponent implements OnInit, AfterViewInit, OnChanges {
-
     @Input() public id: string;
     @Input() public options: GaugeOptions;
     @Input() public value: any;
@@ -52,7 +51,7 @@ export class NgxGaugeComponent implements OnInit, AfterViewInit, OnChanges {
         let h = canvas.parentNode.clientHeight;// - (canvas.parentNode.clientHeight / 4);
         if (w < h) h = w;
         this.canvas.nativeElement.height = h;
-        this.canvas.nativeElement.width = w;        
+        this.canvas.nativeElement.width = w;
         this.init(this.type);
     }
 
@@ -99,13 +98,13 @@ export class NgxGaugeComponent implements OnInit, AfterViewInit, OnChanges {
     init(type: GaugeType) {
         this.type = type;
         if (type === GaugeType.Gauge) {
-            this.gauge = new Gauge(this.canvas.nativeElement);        
+            this.gauge = new Gauge(this.canvas.nativeElement);
             this.gauge.setTextField(this.gaugetext.nativeElement);
         } else if (type === GaugeType.Zones) {
-            this.gauge = new Gauge(this.canvas.nativeElement);        
+            this.gauge = new Gauge(this.canvas.nativeElement);
             this.gauge.setTextField(this.gaugetext.nativeElement);
         } else if (type === GaugeType.Donut) {
-            this.gauge = new Donut(this.canvas.nativeElement);        
+            this.gauge = new Donut(this.canvas.nativeElement);
             this.gauge.setTextField(this.gaugetext.nativeElement);
         }
         this.setOptions(this.options);

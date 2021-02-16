@@ -5,12 +5,12 @@
 <mat-datepicker #picker></mat-datepicker>
 <mat-select class="mychart-time-select toolbar-cmp" [value]="this.date.getHours()" (selectionChange)="this.setHours($event.value)">
     <mat-option *ngFor="let hour of hours" [value]="hour">
-        {{ hour }}
+        {{ ("0" + hour).slice(-2) }}
     </mat-option>
 </mat-select>
 :
 <mat-select class="mychart-time-select toolbar-cmp" [value]="this.date.getMinutes()" (selectionChange)="this.setMinutes($event.value)" >
     <mat-option *ngFor="let minute of minutes" [value]="minute">
-        {{ minute }}
+        {{ ("0" + minute).slice(-2) }}
     </mat-option>
 </mat-select>

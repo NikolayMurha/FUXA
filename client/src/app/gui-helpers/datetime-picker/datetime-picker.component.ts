@@ -28,8 +28,8 @@ export class DatetimePickerComponent implements OnInit, OnChanges {
         if (this.timestamp) {
             this.setByTimestamp(this.timestamp);
         }
-        this.hours = Array.from(Array(24).keys()).map((x) => x + 1);
-        this.minutes = Array.from(Array(60).keys()).map((x) => x + 1);
+        this.hours = Array.from(Array(25).keys());
+        this.minutes = Array.from(Array(61).keys());
         this.dateFormControl = new FormControl(this.date);
     }
 

@@ -164,22 +164,31 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     forward() {
-        this.setFrom(this.range.to);
+        let newValue = this.range.to + this.currentRangeTime;
+        if (newValue > Date.now()){
+            newValue = Date.now();
+        }
+        this.setTo(newValue);
     }
 
     backward() {
-        this.setFrom(this.range.from - (ChartRangeConverter.ChartRangeToHours(this.rangeTypeValue) * 60 * 60 * 1000));
+        this.setTo(this.range.to - this.currentRangeTime);
     }
 
-    setFrom(from) {
-        this.range.from = from
-        this.range.to = this.range.from + (ChartRangeConverter.ChartRangeToHours(this.rangeTypeValue) * 60 * 60 * 1000);
+    setTo(to) {
+        this.range.to = to
+        this.range.from = this.range.to - this.currentRangeTime;
+        console.log('setTo', to)
         this.rangeChanged();
+    }
+
+    private get currentRangeTime() {
+        return (ChartRangeConverter.ChartRangeToHours(this.rangeTypeValue) * 60 * 60 * 1000)
     }
 
     onRangeChanged(ev) {
         if (ev) {
-            this.setFrom(Date.now());
+            this.setTo(Date.now());
         }
     }
 
