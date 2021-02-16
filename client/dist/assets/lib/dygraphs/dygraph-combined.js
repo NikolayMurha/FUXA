@@ -9294,8 +9294,8 @@ legend.prototype.select = function(e) {
     this.legend_div_.style.top = topLegend + "px";
   }
 
-  var html = legend.generateLegendHTML(e.dygraph, undefined, points, this.one_em_width_);
-  //!var html = legend.generateLegendHTML(e.dygraph, xValue, points, this.one_em_width_);
+  // var html = legend.generateLegendHTML(e.dygraph, undefined, points, this.one_em_width_);
+  var html = legend.generateLegendHTML(e.dygraph, xValue, points, this.one_em_width_);
   this.legend_div_.innerHTML = html;
   this.legend_div_.style.display = '';
 };
