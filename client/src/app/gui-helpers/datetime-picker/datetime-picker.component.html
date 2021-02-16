@@ -1,6 +1,6 @@
 
 <input matInput [matDatepicker]="picker"  [formControl]="dateFormControl"
-       class="mychart-date-select" (focus)="picker.open()" (dateChange)="this.setDate($event)">
+       class="mychart-date-input-select" (focus)="picker.open()" (dateChange)="this.setDate($event)">
 <!--            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>-->
 <mat-datepicker #picker></mat-datepicker>
 <mat-select class="mychart-time-select toolbar-cmp" [value]="this.date.getHours()" (selectionChange)="this.setHours($event.value)">

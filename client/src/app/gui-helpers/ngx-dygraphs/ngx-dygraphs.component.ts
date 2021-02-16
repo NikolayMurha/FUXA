@@ -16,6 +16,7 @@ import {DygraphOptions} from './dygraphOptions';
 import {ChartRangeConverter, ChartRangeType} from '../../_models/chart';
 import {DaqQuery} from '../../_models/hmi';
 import {isUndefined} from 'util';
+import {HmiService} from "../../_services/hmi.service";
 
 declare const Dygraph: any;
 
@@ -48,11 +49,10 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
     public rangeTypeValue = <ChartRangeType>Object.keys(ChartRangeType)[0];
     public rangeType: ChartRangeType;
     public range = {from: Date.now(), to: Date.now()};
-
-    //   public chartWidth: number;
-    //   public chartHeight: number;
-    mapData = {};
-
+    // public chartWidth: number;
+    // public chartHeight: number;
+    public mapData = {};
+    public visible = [];
     public dygraph: any;
 
     public defOptions: DygraphOptions = {
@@ -65,15 +65,15 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
         title: 'My Title',
         animatedZooms: true,
         connectSeparatedPoints: true,
-        legend: 'always',
+        legend: 'follow',
         labelsSeparateLines: true,
         // pointSize: 2,
         titleHeight: 20,
-        axisLabelFontSize: 12
+        axisLabelFontSize: 12,
     };
     public sampleData = [[new Date('1967/09/14'), 0], [new Date('1968/09/14'), 1]];
 
-    constructor(private changeDetector: ChangeDetectorRef) {
+    constructor(private changeDetector: ChangeDetectorRef, public hmiService: HmiService) {
     }
 
     public ngOnInit() {
@@ -157,7 +157,6 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
 
         this.loadingInProgress = true;
         const options = Object.assign({}, this.options);
-
         if (!options.legend) {
             options.legend = 'always';
         }
@@ -165,7 +164,7 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
 
     forward() {
         let newValue = this.range.to + this.currentRangeTime;
-        if (newValue > Date.now()){
+        if (newValue > Date.now()) {
             newValue = Date.now();
         }
         this.setTo(newValue);
@@ -175,10 +174,15 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
         this.setTo(this.range.to - this.currentRangeTime);
     }
 
+    setFrom(from) {
+        this.range.from = from
+        this.range.to = this.range.from + this.currentRangeTime;
+        this.rangeChanged();
+    }
+
     setTo(to) {
         this.range.to = to
         this.range.from = this.range.to - this.currentRangeTime;
-        console.log('setTo', to)
         this.rangeChanged();
     }
 
@@ -219,6 +223,14 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
         }
     }
 
+    public updateVisibility() {
+        let visibility = Object.keys(this.mapData).map((sig, i)=>{
+            if (this.dygraph){
+                this.dygraph.setVisibility(i, this.visible.indexOf(sig) >= 0);
+            }
+        });
+    }
+
     public init() {
         this.options.labels = ['DateTime'];
         this.mapData = {};
@@ -247,6 +259,7 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
             this.mapData[id] = this.options.labels.length;
             this.options.labels.push(name);
             this.options.colors.push(color);
+            this.visible.push(id);
             if (this.dygraph) {
                 this.dygraph.updateOptions({labels: this.options.labels, colors: this.options.colors});
             }

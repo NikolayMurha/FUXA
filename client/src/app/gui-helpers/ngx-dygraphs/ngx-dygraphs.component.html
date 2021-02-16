@@ -1,10 +1,17 @@
 <div class="mychart-panel" #chartPanel>
     <div class="mychar-toolbar" *ngIf="withToolbar && !isEditor">
-        <!-- <div class="mychar-toolbar-space" *ngIf="isEditor">Toolbar</div> -->
+        <!-- <div class="mychar-toolbar-space" *ngIf="isEditor"> Toolbar </div> -->
         <div style="display: block; padding-right: 5px;text-align: center;" class="my-form-field" *ngIf="!isEditor">
-            <datetime-picker [timestamp]="this.range.from" (timestampChange)="this.setFrom($event)"></datetime-picker>
-            <mat-select [(value)]="rangeTypeValue" class="mychart-toolbar-select toolbar-cmp"
-                        (selectionChange)="onRangeChanged($event.source.value)">
+            <datetime-picker class="mychart-datetime-picker" [timestamp]="this.range.from" (timestampChange)="this.setFrom($event)"></datetime-picker>
+
+            <mat-select class="mychart-toolbar-select mychart-visibility-select toolbar-cmp" multiple [(value)]="visible" (selectionChange)="updateVisibility()">
+                <mat-select-trigger><mat-icon style="font-size: 21px">remove_red_eye</mat-icon></mat-select-trigger>
+                <mat-option *ngFor="let varMap of mapData | keyvalue" [value]="varMap.key">
+                   {{ varMap.key }}
+                </mat-option>
+            </mat-select>
+
+            <mat-select [(value)]="rangeTypeValue" class="mychart-toolbar-select toolbar-cmp" (selectionChange)="onRangeChanged($event.source.value)">
                 <mat-option *ngFor="let ev of rangeType | enumToArray" [value]="ev.key">
                     {{ ev.value }}
                 </mat-option>

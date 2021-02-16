@@ -55,12 +55,14 @@ export class DatetimePickerComponent implements OnInit, OnChanges {
     }
 
     protected changed() {
+        console.log('datetime changed');
         this.dateChange.emit(this.date);
         this.timestampChange.emit(this.date.getTime());
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.timestamp) {
+            console.log('Handle changes');
             this.setByTimestamp(changes.timestamp.currentValue);
             this.dateFormControl.setValue(this.date);
         }

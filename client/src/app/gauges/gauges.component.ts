@@ -1,36 +1,30 @@
-import { Component, OnInit, OnDestroy, Injectable, Inject, Output, EventEmitter } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Observable } from 'rxjs';
+import {EventEmitter, Injectable, Output} from '@angular/core';
+import {MatDialog} from '@angular/material';
 
-import { TranslateService } from '@ngx-translate/core';
-import { HmiService } from '../_services/hmi.service';
-import { ChartRangeType } from '../_models/chart';
+import {TranslateService} from '@ngx-translate/core';
+import {HmiService} from '../_services/hmi.service';
+import {ChartRangeType} from '../_models/chart';
+import {Event, GaugeEvent, GaugeEventType, GaugeSettings, GaugeStatus, Variable} from '../_models/hmi';
+import {ValueComponent} from './controls/value/value.component';
+import {GaugeDialogType} from './gauge-property/gauge-property.component';
+import {HtmlInputComponent} from './controls/html-input/html-input.component';
+import {HtmlButtonComponent} from './controls/html-button/html-button.component';
+import {HtmlSelectComponent} from './controls/html-select/html-select.component';
+import {HtmlChartComponent} from './controls/html-chart/html-chart.component';
+import {HtmlBagComponent} from './controls/html-bag/html-bag.component';
+import {HtmlSwitchComponent} from './controls/html-switch/html-switch.component';
+import {GaugeProgressComponent} from './controls/gauge-progress/gauge-progress.component';
+import {GaugeSemaphoreComponent} from './controls/gauge-semaphore/gauge-semaphore.component';
+import {ShapesComponent} from './shapes/shapes.component';
+import {ProcEngComponent} from './shapes/proc-eng/proc-eng.component';
+import {ApeShapesComponent} from './shapes/ape-shapes/ape-shapes.component';
+import {PipeComponent} from './controls/pipe/pipe.component';
+import {SliderComponent} from './controls/slider/slider.component';
 
-import { GaugeBaseComponent } from './gauge-base/gauge-base.component';
-import { GaugeSettings, GaugeProperty, Variable, Event, GaugeEvent, GaugeEventType, GaugeStatus } from '../_models/hmi';
-import { ValueComponent } from './controls/value/value.component';
-import { GaugePropertyComponent, GaugeDialogType } from './gauge-property/gauge-property.component';
-import { HtmlInputComponent } from './controls/html-input/html-input.component';
-import { HtmlButtonComponent } from './controls/html-button/html-button.component';
-import { HtmlSelectComponent } from './controls/html-select/html-select.component';
-import { HtmlChartComponent } from './controls/html-chart/html-chart.component';
-import { HtmlBagComponent } from './controls/html-bag/html-bag.component';
-import { HtmlSwitchComponent } from './controls/html-switch/html-switch.component';
-import { GaugeProgressComponent } from './controls/gauge-progress/gauge-progress.component';
-import { GaugeSemaphoreComponent } from './controls/gauge-semaphore/gauge-semaphore.component';
-import { ShapesComponent } from './shapes/shapes.component';
-import { ProcEngComponent } from './shapes/proc-eng/proc-eng.component';
-import { ApeShapesComponent } from './shapes/ape-shapes/ape-shapes.component';
-import { PipeComponent } from './controls/pipe/pipe.component';
-import { SliderComponent } from './controls/slider/slider.component';
-
-import { WindowRef } from '../_helpers/windowref';
-import { Dictionary } from '../_helpers/dictionary';
-import { NgxDygraphsComponent } from '../gui-helpers/ngx-dygraphs/ngx-dygraphs.component';
-import { NgxGaugeComponent } from '../gui-helpers/ngx-gauge/ngx-gauge.component';
-import { GaugeOptions } from '../gui-helpers/ngx-gauge/gaugeOptions';
-import { forEach } from '@angular/router/src/utils/collection';
-import { NgxNouisliderComponent } from '../gui-helpers/ngx-nouislider/ngx-nouislider.component';
+import {WindowRef} from '../_helpers/windowref';
+import {NgxDygraphsComponent} from '../gui-helpers/ngx-dygraphs/ngx-dygraphs.component';
+import {NgxGaugeComponent} from '../gui-helpers/ngx-gauge/ngx-gauge.component';
+import {NgxNouisliderComponent} from '../gui-helpers/ngx-nouislider/ngx-nouislider.component';
 
 @Injectable()
 export class GaugesManager {
@@ -66,9 +60,9 @@ export class GaugesManager {
         PipeComponent, SliderComponent, HtmlSwitchComponent];
 
     constructor(private hmiService: HmiService,
-        private winRef: WindowRef,
-        private translateService: TranslateService,
-        private dialog: MatDialog) {
+                private winRef: WindowRef,
+                private translateService: TranslateService,
+                private dialog: MatDialog) {
         // subscription to the change of variable value, then emit to the gauges of fuxa-view
         this.hmiService.onVariableChanged.subscribe(sig => {
             try {
@@ -77,6 +71,7 @@ export class GaugesManager {
 
             }
         });
+
         // subscription to DAQ values, then emit to charts gauges of fuxa-view
         this.hmiService.onDaqResult.subscribe(message => {
             try {
@@ -115,7 +110,7 @@ export class GaugesManager {
         return gs;
     }
 
-	createGaugeStatus(ga: GaugeSettings) : GaugeStatus {
+    createGaugeStatus(ga: GaugeSettings): GaugeStatus {
         let result = new GaugeStatus();
         if (!ga.type.startsWith(HtmlChartComponent.TypeTag)) {
             result.onlyChange = true;
@@ -196,15 +191,16 @@ export class GaugesManager {
     emitBindedSignals(domViewId: string) {
         this.hmiService.emitMappedSignalsGauge(domViewId);
     }
-	/**
-	 * called from fuxa-view, bind dom view, gauge with signal (for animation) and event
-	 * @param gaugekey
-	 * @param gauge
-	 * @param domViewId
-	 * @param ga
-	 * @param bindclick
-	 * @param bindhtmlevent
-	 */
+
+    /**
+     * called from fuxa-view, bind dom view, gauge with signal (for animation) and event
+     * @param gaugekey
+     * @param gauge
+     * @param domViewId
+     * @param ga
+     * @param bindclick
+     * @param bindhtmlevent
+     */
     bindGauge(gauge: any, domViewId: string, ga: GaugeSettings, bindclick: any, bindhtmlevent: any) {
         let sigsid: string[] = this.getBindSignals(ga);
         if (sigsid) {
@@ -249,10 +245,10 @@ export class GaugesManager {
     }
 
 
-	/**
+    /**
      * @param domViewId
-	 * called from fuxa-view, remove bind of dom view gauge
-	 */
+     * called from fuxa-view, remove bind of dom view gauge
+     */
     unbindGauge(domViewId: string) {
         // first remove special gauge like chart from memorySigGauges
         let sigGaugeSettingsIdremoved = this.hmiService.removeSignalGaugeFromMap(domViewId);
@@ -303,20 +299,20 @@ export class GaugesManager {
         }
     }
 
-	/**
-	 * get all gauge settings binded to dom view with the signal
-	 * @param domViewId
-	 * @param sigid
-	 */
+    /**
+     * get all gauge settings binded to dom view with the signal
+     * @param domViewId
+     * @param sigid
+     */
     getGaugeSettings(domViewId: string, sigid: string): GaugeSettings[] {
         let gslist = this.hmiService.getMappedSignalsGauges(domViewId, sigid);
         return gslist;
     }
 
-	/**
-	 * get all signals mapped in all dom views, used from LabComponent
-	 * @param fulltext a copy with item name and source
-	 */
+    /**
+     * get all signals mapped in all dom views, used from LabComponent
+     * @param fulltext a copy with item name and source
+     */
     getMappedGaugesSignals(fulltext: boolean) {
         return this.hmiService.getMappedVariables(fulltext);
     }
@@ -387,12 +383,12 @@ export class GaugesManager {
         }
     }
 
-	/**
-	 * manage to which gauge to forward the process function
-	 * @param ga
-	 * @param svgele
-	 * @param sig
-	 */
+    /**
+     * manage to which gauge to forward the process function
+     * @param ga
+     * @param svgele
+     * @param sig
+     */
     processValue(ga: GaugeSettings, svgele: any, sig: Variable, gaugeStatus: GaugeStatus) {
         for (let i = 0; i < GaugesManager.Gauges.length; i++) {
             if (ga.type.startsWith(GaugesManager.Gauges[i].TypeTag)) {
@@ -436,15 +432,15 @@ export class GaugesManager {
         }
     }
 
-    toggleSignalValue(sigid: string){
-      if (this.hmiService.variables.hasOwnProperty(sigid)) {
-          let currentValue = this.hmiService.variables[sigid].value;
-          // Only boolean values
-          if (currentValue !== true && currentValue !== false && currentValue !== undefined){
-            return;
-          }
-          this.putSignalValue(sigid, String(!currentValue));
-      }
+    toggleSignalValue(sigid: string) {
+        if (this.hmiService.variables.hasOwnProperty(sigid)) {
+            let currentValue = this.hmiService.variables[sigid].value;
+            // Only boolean values
+            if (currentValue !== true && currentValue !== false && currentValue !== undefined) {
+                return;
+            }
+            this.putSignalValue(sigid, String(!currentValue));
+        }
     }
 
     /**
@@ -528,7 +524,9 @@ export class GaugesManager {
      * @param elements
      */
     static initElementColor(bkcolor, color, elements) {
-        var elems = elements.filter(function(el) { return el; });
+        var elems = elements.filter(function (el) {
+            return el;
+        });
         for (let i = 0; i < elems.length; i++) {
             let type = elems[i].getAttribute('type');
             if (type.startsWith(GaugeProgressComponent.TypeTag)) {
@@ -573,14 +571,14 @@ export class GaugesManager {
         return 'shape_';
     }
 
-	/**
-	 * initialize the gauge element found in svg, like ngx-dygraph, ngx-gauge
-	 * in svg is only a 'div' that have to be dynamic build and render from angular
-	 * @param ga gauge settings
-	 * @param res reference to factory
-	 * @param ref reference to factory
-	 * @param isview in view or editor, in editor have to disable mouse activity
-	 */
+    /**
+     * initialize the gauge element found in svg, like ngx-dygraph, ngx-gauge
+     * in svg is only a 'div' that have to be dynamic build and render from angular
+     * @param ga gauge settings
+     * @param res reference to factory
+     * @param ref reference to factory
+     * @param isview in view or editor, in editor have to disable mouse activity
+     */
     initElementAdded(ga: GaugeSettings, res: any, ref: any, isview: boolean) {
         if (!ga) {
             return null;
@@ -596,7 +594,9 @@ export class GaugesManager {
             // prepare attribute
             let chartRange = ChartRangeType;
             Object.keys(chartRange).forEach(key => {
-                this.translateService.get(chartRange[key]).subscribe((txt: string) => { chartRange[key] = txt });
+                this.translateService.get(chartRange[key]).subscribe((txt: string) => {
+                    chartRange[key] = txt
+                });
             });
             let gauge: NgxDygraphsComponent = HtmlChartComponent.initElement(ga, res, ref, isview, chartRange);
             if (!gauge) {
@@ -613,7 +613,7 @@ export class GaugesManager {
                             gauge.addLine(sigid, sigProperty.name, line.color);
                         }
                     });
-                    gauge.setOptions({ title: chart.name });
+                    gauge.setOptions({title: chart.name});
                 }
             }
             this.mapChart[ga.id] = gauge;
@@ -647,9 +647,9 @@ export class GaugesManager {
         }
     }
 
-	/**
-	 * clear memory object used from view, some reset
-	 */
+    /**
+     * clear memory object used from view, some reset
+     */
     clearMemory() {
         this.memorySigGauges = {};
     }
