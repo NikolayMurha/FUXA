@@ -187,7 +187,7 @@ export class NgxDygraphsComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     private get currentRangeTime() {
-        return (ChartRangeConverter.ChartRangeToHours(this.rangeTypeValue) * 60 * 60 * 1000)
+        return (ChartRangeConverter.chartRangeToMs(this.rangeTypeValue))
     }
 
     onRangeChanged(ev) {

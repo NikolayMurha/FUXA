@@ -137,6 +137,9 @@
     "chart.property-color.legend": "Legend color",
     "chart.property-legend.mode": "Legend show mode",
 
+    "chart.rangetype-last15min": "Last 15 min",
+    "chart.rangetype-last30min": "Last 30 min",
+    "chart.rangetype-last1h": "Last 1 hour",
     "chart.rangetype-last8h": "Last 8 hours",
     "chart.rangetype-last1d": "Last day",
     "chart.rangetype-last3d": "Last 3 days",
@@ -439,7 +442,7 @@
     "device.tag-property-address-offset": "Address offset (1-65536)",
     "device.tag-array-id": "Array ID:",
     "device.tag-array-value": "Value:",
-    
+
     "users.list-title": "Users settings",
     "users.list-name": "Username",
     "users.list-groups": "Groups",

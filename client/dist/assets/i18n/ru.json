@@ -127,10 +127,13 @@
     "chart.property-color.legend": "Цвет легенды",
     "chart.property-legend.mode": "Режим показа легенды",
 
-    "chart.rangetype-last8h": "Последние 8 часов",
-    "chart.rangetype-last1d": "Последний день",
-    "chart.rangetype-last3d": "Последние 3 дня",
-    "chart.rangetype-last1w": "Последняя неделя",
+    "chart.rangetype-last15min": "15 минут",
+    "chart.rangetype-last30min": "30 минут",
+    "chart.rangetype-last1h": "1 час",
+    "chart.rangetype-last8h": "8 часов",
+    "chart.rangetype-last1d": "1 день",
+    "chart.rangetype-last3d": "3 дня",
+    "chart.rangetype-last1w": "7 дней",
 
     "chart.legend-always": "всегда",
     "chart.legend-follow": "следовать",
