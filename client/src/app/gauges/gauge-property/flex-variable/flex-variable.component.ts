@@ -3,15 +3,13 @@ import { ReplaySubject, Subject } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 
-import { Device } from '../../../_models/device';
+import { Device, USER_DEFINED_VARIABLE } from '../../../_models/device';
 import { HmiService } from '../../../_services/hmi.service';
 
 interface Variable {
     id: string;
     name: string;
 }
-
-export const USER_DEFINED_VARIABLE = 'user-defined';
 
 @Component({
     selector: 'flex-variable',
@@ -26,6 +24,7 @@ export class FlexVariableComponent implements OnInit {
     @Input() variable: string;
 
     @Input() value: any;
+    @Input() tobind = false;
 
     @Input() allowManualEdit: boolean = false;
     @Output() onchange: EventEmitter<any> = new EventEmitter();
