@@ -24,10 +24,10 @@
 						<button mat-icon-button (click)="onAddInput()">
 							<mat-icon>add_circle_outline</mat-icon>
 						</button>
-						<button mat-icon-button (click)="slideView = !slideView;onRangeViewToggle()" *ngIf="isRangeToShow()">
+						<!-- <button mat-icon-button (click)="slideView = !slideView;onRangeViewToggle()" *ngIf="isRangeToShow()">
 							<mat-icon class="header-icon" *ngIf="slideView">toll</mat-icon>
 							<mat-icon class="header-icon" *ngIf="!slideView">input</mat-icon>
-						</button>
+						</button> -->
 						<!-- <button mat-icon-button (click)="withAlarm = !withAlarm;onAlarmToggle();" *ngIf="isAlarmToShow()">
 							<mat-icon class="header-icon" *ngIf="!withAlarm">notifications</mat-icon>
 							<mat-icon class="header-icon" *ngIf="withAlarm">notifications_off</mat-icon>
@@ -40,13 +40,15 @@
 			</div>
 		</mat-tab>
 		<mat-tab label="{{'gauges.property-events' | translate}}" *ngIf="eventsSupported">
-			<div  class="mat-tab-container">
-        <div class="toolbox">
-          <button mat-icon-button (click)="onAddEvent()">
-            <mat-icon>add_circle_outline</mat-icon>
-          </button>
-        </div>
-				<div mat-dialog-content style="overflow: visible; width:100%;">
+			<div style="height: 500px; overflow-y: auto; overflow-x: hidden; padding-top: 15px;">
+				<div style="display: block;">
+					<div class="toolbox">
+						<button mat-icon-button (click)="onAddEvent()" matTooltip="{{'gauges.property-tooltip-add-event' | translate}}">
+							<mat-icon>add_circle_outline</mat-icon>
+						</button>
+					</div>
+				</div>
+				<div mat-dialog-content style="overflow: hidden; width:100%;">
 					<flex-event [property]="property" [views]="views" [data]="data" [inputs]="inputs" #flexevent *ngIf="eventsSupported" style="padding-bottom: 5px"></flex-event>
 				</div>
 			</div>

@@ -604,7 +604,7 @@ export class GaugesManager {
             }
             gauge.init();
             if (ga.property && ga.property.id) {
-                let chart = this.hmiService.getChart(ga.property.id)
+                let chart = this.hmiService.getChart(ga.property.id);
                 if (chart) {
                     chart.lines.forEach(line => {
                         let sigid = HmiService.toVariableId(line.device, line.id);
