@@ -610,7 +610,7 @@ export class GaugesManager {
                         let sigid = HmiService.toVariableId(line.device, line.id);
                         let sigProperty = this.hmiService.getMappedVariable(sigid, true);
                         if (sigProperty) {
-                            gauge.addLine(sigid, sigProperty.name, line.color);
+                            gauge.addLine(sigid, line.label || sigProperty.name, line.color);
                         }
                     });
                     gauge.setOptions({title: chart.name});

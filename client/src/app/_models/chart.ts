@@ -10,6 +10,7 @@ export class ChartLine {
     id: string;
     name: string;
     color: string;
+    label: string;
 }
 
 export enum ChartViewType {

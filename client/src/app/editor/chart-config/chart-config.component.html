@@ -59,6 +59,9 @@
                             <span>{{tag.device}}</span>
                         </div>
                         <div>
+                            <input [(ngModel)]= "tag.label" name="label" placeholder="{{'chart.config-tag-legend-name' | translate}}" style="margin-right: 5px"/>
+                        </div>
+                        <div>
                             <input [(colorPicker)]="tag.color" class="color-line input-color" title="{{'chart.config-line-color' | translate}}"
                             [style.background]="tag.color" [cpAlphaChannel]="'always'" [cpPosition]="'top'" style="height:20px !important"
                             [cpPresetColors]="defaultColor" [cpCancelButton]="true" [cpCancelButtonClass]="'cpCancelButtonClass'"

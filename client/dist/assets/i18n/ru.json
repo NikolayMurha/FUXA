@@ -110,6 +110,7 @@
     "chart.config-name": "Имя",
     "chart.config-rename": "Переименовать",
     "chart.config-delete": "Удалить",
+    "chart.config-tag-legend-name": "Имя переменной на графике",
 
     "chart.property-props": "Свойства",
     "chart.property-layout": "Вид",

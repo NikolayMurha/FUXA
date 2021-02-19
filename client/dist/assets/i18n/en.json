@@ -120,6 +120,7 @@
     "chart.config-name": "Name",
     "chart.config-rename": "Rename",
     "chart.config-delete": "Delete",
+    "chart.config-tag-legend-name": "Line legend name",
 
     "chart.property-props": "Property",
     "chart.property-layout": "Layout",
