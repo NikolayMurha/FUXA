@@ -9379,7 +9379,7 @@ legend.generateLegendHTML = function (g, x, sel_points, oneEmWidth) {
     html = '';
     for (i = 1; i < labels.length; i++) {
       var series = g.getPropertiesForSeries(labels[i]);
-      //if (!series.visible) continue;
+      if (!series.visible) continue;
 
       if (html !== '') html += (sepLines ? '<br/>' : ' ');
       strokePattern = g.getOption("strokePattern", labels[i]);
