@@ -6,8 +6,8 @@
 
             <mat-select class="mychart-toolbar-select mychart-visibility-select toolbar-cmp" multiple [(value)]="visible" (selectionChange)="updateVisibility()">
                 <mat-select-trigger><mat-icon style="font-size: 21px">remove_red_eye</mat-icon></mat-select-trigger>
-                <mat-option *ngFor="let varMap of mapData | keyvalue" [value]="varMap.key">
-                   {{ varMap.key }}
+                <mat-option *ngFor="let varMap of mapData | keyvalue; let i = index" [value]="varMap.key">
+                   {{ this.options.labels[varMap.value] || varMap.key}}
                 </mat-option>
             </mat-select>
 
