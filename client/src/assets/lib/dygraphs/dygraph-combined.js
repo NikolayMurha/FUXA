@@ -4585,19 +4585,16 @@ Dygraph.prototype.gatherDatasets_ = function(rolledSeries, dateWindow) {
     }
 
     var seriesName = this.attr_("labels")[seriesIdx];
-    var seriesExtremes = this.dataHandler_.getExtremeYValues(series,
-        dateWindow, this.getBooleanOption("stepPlot",seriesName));
+    var seriesExtremes = this.dataHandler_.getExtremeYValues(series, dateWindow, this.getBooleanOption("stepPlot", seriesName));
 
-    var seriesPoints = this.dataHandler_.seriesToPoints(series,
-        seriesName, boundaryIds[seriesIdx-1][0]);
+    var seriesPoints = this.dataHandler_.seriesToPoints(series, seriesName, boundaryIds[seriesIdx-1][0]);
 
     if (this.getBooleanOption("stackedGraph")) {
       axisIdx = this.attributes_.axisForSeries(seriesName);
       if (cumulativeYval[axisIdx] === undefined) {
         cumulativeYval[axisIdx] = [];
       }
-      Dygraph.stackPoints_(seriesPoints, cumulativeYval[axisIdx], seriesExtremes,
-                           this.getBooleanOption("stackedGraphNaNFill"));
+      Dygraph.stackPoints_(seriesPoints, cumulativeYval[axisIdx], seriesExtremes, this.getBooleanOption("stackedGraphNaNFill"));
     }
 
     extremes[seriesName] = seriesExtremes;
@@ -9427,6 +9424,7 @@ legend.generateLegendHTML = function (g, x, sel_points, oneEmWidth) {
   //if (sepLines) html += "<br/>";
   for (i = 1; i < labels.length; i++) {
       var series = g.getPropertiesForSeries(labels[i]);
+      if (!series.visible) continue;
       var pt = { name: series.name };
       var yval = '';
       for (y = 0; y < sel_points.length; y++) {
